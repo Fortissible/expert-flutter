@@ -10,6 +10,7 @@ import 'design_pattern/creational_pattern/builder_pattern.dart';
 import 'design_pattern/creational_pattern/singleton_pattern.dart';
 import 'design_pattern/structural_pattern/adapter_pattern.dart';
 import 'design_pattern/structural_pattern/facade_pattern.dart';
+import 'di/locator.dart' as di;
 
 void main() {
   // CREATIONAL PATTERN - SINGLETON
@@ -62,7 +63,7 @@ void main() {
 
   // CLEAN ARCHITECTURE PROJECT EXAMPLE :
   // https://github.com/dicodingacademy/a199-flutter-expert-project
-
+  di.init();
   runApp(MyApp());
 }
 
@@ -70,17 +71,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => CatNotifier(
-        CatRepository(
-          Client(),
-        ),
-      ),
+      create: (context) => di.locator<CatNotifier>(),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: HomePage(),
+        home: const HomePage(),
       ),
     );
   }
