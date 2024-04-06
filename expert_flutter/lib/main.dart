@@ -82,3 +82,26 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+String detectTriangle(num sideA, num sideB, num sideC){
+  List<num> sides = [sideA, sideB, sideC];
+  sides.sort();
+
+  for (var element in sides) {
+    if (element < 1) {
+      throw Exception("Not valid sides");
+    }
+  }
+
+  if (sides[0] + sides[1] <= sides[2]){
+    throw Exception("Inequality triangle theorem");
+  }
+
+  if (sides[0] == sides[1] && sides[0] == sides[2]){
+    return "Segitiga Sama Sisi";
+  } else if (sides[0] == sides[1] || sides[1] == sides[2]){
+    return "Segitiga Sama Kaki";
+  } else {
+    return "Segitiga Sembarang";
+  }
+}
