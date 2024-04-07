@@ -22,6 +22,7 @@ abstract class MovieRemoteDataSource {
   Future<List<TvModel>> getTopRatedTvSeries();
   Future<List<TvModel>> getPopularTvSeries();
   Future<TvDetailModel> getDetailTvSeries(String tvId);
+  Future<List<TvModel>> searchTvSeries(String query);
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
@@ -32,6 +33,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   static const ENDPOINT_URL_TV_POPULAR = "/tv/popular";
   static const ENDPOINT_URL_TV_ONTHEAIR= "/tv/on_the_air";
   static const ENDPOINT_URL_TV_DETAIL= "/tv";
+  static const ENDPOINT_URL_TV_SEARCH = "/search/tv";
 
   final http.Client client;
 
@@ -152,6 +154,18 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
     if (response.statusCode == 200) {
       return TvDetailModel.fromJson(json.decode(response.body));
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<TvModel>> searchTvSeries(String query) async {
+    final response =
+        await client.get(Uri.parse('$BASE_URL$ENDPOINT_URL_TV_SEARCH?$API_KEY&query=$query'));
+
+    if (response.statusCode == 200) {
+      return TvResponse.fromJson(json.decode(response.body)).results;
     } else {
       throw ServerException();
     }
