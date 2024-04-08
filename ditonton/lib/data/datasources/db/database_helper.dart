@@ -76,4 +76,6 @@ class DatabaseHelper {
 
     return results;
   }
+
+  //TODO CREATE WATCHLIST FOR TV SERIES
 }

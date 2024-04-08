@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ditonton/domain/entities/tv_detail.dart' as ent;
+
 TvDetailModel tvDetailResponseFromJson(String str) => TvDetailModel.fromJson(json.decode(str));
 
 String tvDetailResponseToJson(TvDetailModel data) => json.encode(data.toJson());
@@ -142,6 +144,95 @@ class TvDetailModel {
     "vote_average": voteAverage,
     "vote_count": voteCount,
   };
+
+  ent.TvDetail toEntity() => ent.TvDetail(
+      adult: adult,
+      backdropPath: backdropPath,
+      createdBy: createdBy,
+      episodeRunTime: episodeRunTime,
+      firstAirDate: firstAirDate,
+      genres: genres.map(
+              (genre) => ent.Genre(id: genre.id, name: genre.name)
+      ).toList(),
+      homepage: homepage,
+      id: id,
+      inProduction: inProduction,
+      languages: languages,
+      lastAirDate: lastAirDate,
+      lastEpisodeToAir: ent.LastEpisodeToAir(
+          id: lastEpisodeToAir.id,
+          name: lastEpisodeToAir.name,
+          overview: lastEpisodeToAir.overview,
+          voteAverage: lastEpisodeToAir.voteAverage,
+          voteCount: lastEpisodeToAir.voteCount,
+          airDate: lastEpisodeToAir.airDate,
+          episodeNumber: lastEpisodeToAir.episodeNumber,
+          productionCode: lastEpisodeToAir.productionCode,
+          episodeType: lastEpisodeToAir.episodeType,
+          seasonNumber: lastEpisodeToAir.seasonNumber,
+          runtime: lastEpisodeToAir.runtime,
+          showId: lastEpisodeToAir.showId,
+          stillPath: lastEpisodeToAir.stillPath
+      ),
+      name: name,
+      nextEpisodeToAir: nextEpisodeToAir,
+      networks: networks.map(
+              (network) => ent.Network(
+                  id: network.id,
+                  logoPath: network.logoPath,
+                  name: network.name,
+                  originCountry: network.originCountry as ent.OriginCountry
+              )
+      ).toList(),
+      numberOfEpisodes: numberOfEpisodes,
+      numberOfSeasons: numberOfSeasons,
+      originCountry: originCountry.map(
+              (e) => e as ent.OriginCountry
+      ).toList(),
+      originalLanguage: originalLanguage,
+      originalName: originalName,
+      overview: overview,
+      popularity: popularity,
+      posterPath: posterPath,
+      productionCompanies: productionCompanies.map(
+              (prodsCompany) => ent.Network(
+                  id: prodsCompany.id,
+                  logoPath: prodsCompany.logoPath,
+                  name: prodsCompany.name,
+                  originCountry: prodsCompany.originCountry as ent.OriginCountry
+              )
+      ).toList(),
+      productionCountries: productionCountries.map(
+              (prodsCountry) => ent.ProductionCountry(
+                  iso31661: prodsCountry.iso31661 as ent.OriginCountry,
+                  name: prodsCountry.name
+              )
+      ).toList(),
+      seasons: seasons.map(
+              (season) => ent.Season(
+                  airDate: season.airDate,
+                  episodeCount: season.episodeCount,
+                  id: season.id,
+                  name: season.name,
+                  overview: season.overview,
+                  posterPath: season.posterPath,
+                  seasonNumber: season.seasonNumber,
+                  voteAverage: season.voteAverage
+              )
+      ).toList(),
+      spokenLanguages: spokenLanguages.map(
+              (spokenLang) => ent.SpokenLanguage(
+                  englishName: spokenLang.englishName,
+                  iso6391: spokenLang.iso6391,
+                  name: spokenLang.name
+              )
+      ).toList(),
+      status: status,
+      tagline: tagline,
+      type: type,
+      voteAverage: voteAverage,
+      voteCount: voteCount
+  );
 }
 
 class Genre {

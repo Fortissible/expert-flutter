@@ -18,6 +18,8 @@ class HomeMoviePage extends StatefulWidget {
 }
 
 class _HomeMoviePageState extends State<HomeMoviePage> {
+  bool _isTvSeriesContent = false;
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +47,19 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               leading: Icon(Icons.movie),
               title: Text('Movies'),
               onTap: () {
+                setState(() {
+                  _isTvSeriesContent = false;
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.live_tv_outlined),
+              title: Text('TV Series'),
+              onTap: () {
+                setState(() {
+                  _isTvSeriesContent = true;
+                });
                 Navigator.pop(context);
               },
             ),
