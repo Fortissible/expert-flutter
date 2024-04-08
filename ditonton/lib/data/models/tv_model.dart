@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 class TvModel extends Equatable{
   final bool adult;
-  final String backdropPath;
+  final String? backdropPath;
   final List<int> genreIds;
   final int id;
   final List<String> originCountry;
@@ -11,7 +11,7 @@ class TvModel extends Equatable{
   final String originalName;
   final String overview;
   final double popularity;
-  final String posterPath;
+  final String? posterPath;
   final DateTime firstAirDate;
   final String name;
   final double voteAverage;
@@ -70,7 +70,7 @@ class TvModel extends Equatable{
 
   Tv toEntity() => Tv(
       adult: adult,
-      backdropPath: backdropPath,
+      backdropPath: backdropPath!,
       genreIds: genreIds,
       id: id,
       originCountry: originCountry,
@@ -78,7 +78,7 @@ class TvModel extends Equatable{
       originalName: originalName,
       overview: overview,
       popularity: popularity,
-      posterPath: posterPath,
+      posterPath: posterPath!,
       firstAirDate: firstAirDate,
       name: name,
       voteAverage: voteAverage,
