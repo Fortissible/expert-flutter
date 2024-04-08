@@ -3,11 +3,14 @@ import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
 import 'package:ditonton/presentation/pages/movie_detail_page.dart';
+import 'package:ditonton/presentation/pages/now_playing_tv_page.dart';
 import 'package:ditonton/presentation/pages/popular_movies_page.dart';
+import 'package:ditonton/presentation/pages/popular_tv_page.dart';
 import 'package:ditonton/presentation/pages/search_page.dart';
 import 'package:ditonton/presentation/pages/top_rated_movies_page.dart';
+import 'package:ditonton/presentation/pages/top_rated_tv_page.dart';
 import 'package:ditonton/presentation/pages/tv_detail_page.dart';
-import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
+import 'package:ditonton/presentation/pages/watchlist_page.dart';
 import 'package:ditonton/presentation/provider/movie_list_notifier.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/presentation/provider/tv_list_notifier.dart';
@@ -98,7 +101,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               leading: Icon(Icons.save_alt),
               title: Text('Watchlist'),
               onTap: () {
-                Navigator.pushNamed(context, WatchlistMoviesPage.ROUTE_NAME);
+                Navigator.pushNamed(context, WatchlistPage.ROUTE_NAME);
               },
             ),
             ListTile(
@@ -132,10 +135,15 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Now Playing',
-                style: kHeading6,
-              ),
+              _isTvSeriesContent
+                  ? _buildSubHeading(
+                    title: 'Now Playing',
+                    onTap: () => Navigator.pushNamed(context, NowPlayingTvPage.ROUTE_NAME),
+                  )
+                  : Text(
+                    'Now Playing',
+                    style: kHeading6,
+                  ),
               _isTvSeriesContent
                 ? Consumer<TvListNotifier>(builder: (context, data, child) {
                 final state = data.nowPlayingState;
@@ -163,11 +171,10 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               }),
               _buildSubHeading(
                 title: 'Popular',
-                onTap:
+                onTap: () =>
                 _isTvSeriesContent
-                  ? null
-                  : () =>
-                    Navigator.pushNamed(context, PopularMoviesPage.ROUTE_NAME),
+                  ? Navigator.pushNamed(context, PopularTvPage.ROUTE_NAME)
+                  : Navigator.pushNamed(context, PopularMoviesPage.ROUTE_NAME),
               ),
               _isTvSeriesContent
                 ? Consumer<TvListNotifier>(builder: (context, data, child) {
@@ -198,7 +205,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                 title: 'Top Rated',
                 onTap: () =>
                 _isTvSeriesContent
-                    ? null
+                    ? Navigator.pushNamed(context, TopRatedTvPage.ROUTE_NAME)
                     : Navigator.pushNamed(context, TopRatedMoviesPage.ROUTE_NAME),
               ),
               _isTvSeriesContent
@@ -241,17 +248,15 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
           title,
           style: kHeading6,
         ),
-        _isTvSeriesContent
-            ? const SizedBox()
-            : InkWell(
-              onTap: onTap,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [Text('See More'), Icon(Icons.arrow_forward_ios)],
-                ),
-              ),
+        InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [Text('See More'), Icon(Icons.arrow_forward_ios)],
             ),
+          ),
+        ),
       ],
     );
   }
