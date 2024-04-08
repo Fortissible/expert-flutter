@@ -197,6 +197,18 @@ class DetailContent extends StatelessWidget {
                                   return Text(data.message);
                                 } else if (data.recommendationState ==
                                     RequestState.Loaded) {
+                                  if(data.movieRecommendations.isEmpty){
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 16),
+                                      child: Center(
+                                        child: Text(
+                                          "Sorry, there are no recommendations for this movie.\nPlease choose other movie to see the recommendation",
+                                          softWrap: true,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    );
+                                  }
                                   return Container(
                                     height: 150,
                                     child: ListView.builder(
@@ -219,15 +231,15 @@ class DetailContent extends StatelessWidget {
                                               ),
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                    'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                                                'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                                                 placeholder: (context, url) =>
                                                     Center(
-                                                  child:
+                                                      child:
                                                       CircularProgressIndicator(),
-                                                ),
+                                                    ),
                                                 errorWidget:
                                                     (context, url, error) =>
-                                                        Icon(Icons.error),
+                                                    Icon(Icons.error),
                                               ),
                                             ),
                                           ),

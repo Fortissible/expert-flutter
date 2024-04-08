@@ -79,5 +79,17 @@ class TvRepositoryImpl implements TvRepository{
     }
   }
 
+  @override
+  Future<Either<Failure, List<Tv>>> getTvRecommendation(String tvId) async {
+    try {
+      final result = await tvRemoteDataSource.getTvRecommendation(tvId);
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on ServerException {
+      return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
+
   //TODO CREATE WATCHLIST FOR TV SERIES
 }

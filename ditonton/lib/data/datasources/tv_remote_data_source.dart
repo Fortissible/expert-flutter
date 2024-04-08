@@ -13,6 +13,7 @@ abstract class TvRemoteDataSource {
   Future<List<TvModel>> getPopularTvSeries();
   Future<TvDetailModel> getDetailTvSeries(String tvId);
   Future<List<TvModel>> searchTvSeries(String query);
+  Future<List<TvModel>> getTvRecommendation(String TvId);
 }
 
 class TvRemoteDataSourceImpl implements TvRemoteDataSource {
@@ -24,6 +25,7 @@ class TvRemoteDataSourceImpl implements TvRemoteDataSource {
   static const ENDPOINT_URL_TV_ONTHEAIR= "/tv/on_the_air";
   static const ENDPOINT_URL_TV_DETAIL= "/tv";
   static const ENDPOINT_URL_TV_SEARCH = "/search/tv";
+  static const ENDPOINT_URL_TV_RECOMMENDATION = "/recommendations";
 
   final http.Client client;
 
@@ -56,7 +58,9 @@ class TvRemoteDataSourceImpl implements TvRemoteDataSource {
   @override
   Future<List<TvModel>> getTopRatedTvSeries() async {
     final response =
-    await client.get(Uri.parse('$BASE_URL$ENDPOINT_URL_TV_TOPRATED?$API_KEY'));
+    await client.get(
+        Uri.parse('$BASE_URL$ENDPOINT_URL_TV_TOPRATED?$API_KEY')
+    );
 
     if (response.statusCode == 200) {
       return TvResponse.fromJson(json.decode(response.body)).results;
@@ -68,7 +72,9 @@ class TvRemoteDataSourceImpl implements TvRemoteDataSource {
   @override
   Future<TvDetailModel> getDetailTvSeries(String tvId) async {
     final response =
-    await client.get(Uri.parse('$BASE_URL$ENDPOINT_URL_TV_DETAIL/$tvId?$API_KEY'));
+    await client.get(
+        Uri.parse('$BASE_URL$ENDPOINT_URL_TV_DETAIL/$tvId?$API_KEY')
+    );
 
     if (response.statusCode == 200) {
       return TvDetailModel.fromJson(json.decode(response.body));
@@ -80,7 +86,23 @@ class TvRemoteDataSourceImpl implements TvRemoteDataSource {
   @override
   Future<List<TvModel>> searchTvSeries(String query) async {
     final response =
-    await client.get(Uri.parse('$BASE_URL$ENDPOINT_URL_TV_SEARCH?$API_KEY&query=$query'));
+    await client.get(
+        Uri.parse('$BASE_URL$ENDPOINT_URL_TV_SEARCH?$API_KEY&query=$query')
+    );
+
+    if (response.statusCode == 200) {
+      return TvResponse.fromJson(json.decode(response.body)).results;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<TvModel>> getTvRecommendation(String TvId) async {
+    final response =
+    await client.get(
+        Uri.parse('$BASE_URL$ENDPOINT_URL_TV_DETAIL/$TvId$ENDPOINT_URL_TV_RECOMMENDATION?$API_KEY')
+    );
 
     if (response.statusCode == 200) {
       return TvResponse.fromJson(json.decode(response.body)).results;
