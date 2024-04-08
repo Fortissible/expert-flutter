@@ -5,20 +5,16 @@ class TvDetail extends Equatable {
   final String backdropPath;
   final List<dynamic> createdBy;
   final List<int> episodeRunTime;
-  final DateTime firstAirDate;
   final List<Genre> genres;
   final String homepage;
   final int id;
   final bool inProduction;
   final List<String> languages;
-  final DateTime lastAirDate;
-  final LastEpisodeToAir lastEpisodeToAir;
   final String name;
   final dynamic nextEpisodeToAir;
   final List<Network> networks;
   final int numberOfEpisodes;
   final int numberOfSeasons;
-  final List<OriginCountry> originCountry;
   final String originalLanguage;
   final String originalName;
   final String overview;
@@ -39,20 +35,16 @@ class TvDetail extends Equatable {
     required this.backdropPath,
     required this.createdBy,
     required this.episodeRunTime,
-    required this.firstAirDate,
     required this.genres,
     required this.homepage,
     required this.id,
     required this.inProduction,
     required this.languages,
-    required this.lastAirDate,
-    required this.lastEpisodeToAir,
     required this.name,
     required this.nextEpisodeToAir,
     required this.networks,
     required this.numberOfEpisodes,
     required this.numberOfSeasons,
-    required this.originCountry,
     required this.originalLanguage,
     required this.originalName,
     required this.overview,
@@ -75,20 +67,16 @@ class TvDetail extends Equatable {
     backdropPath,
     createdBy,
     episodeRunTime,
-    firstAirDate,
     genres,
     homepage,
     id,
     inProduction,
     languages,
-    lastAirDate,
-    lastEpisodeToAir,
     name,
     nextEpisodeToAir,
     networks,
     numberOfEpisodes,
     numberOfSeasons,
-    originCountry,
     originalLanguage,
     originalName,
     overview,
@@ -127,16 +115,16 @@ class LastEpisodeToAir extends Equatable{
   final int id;
   final String name;
   final String overview;
-  final int voteAverage;
+  final double voteAverage;
   final int voteCount;
   final DateTime airDate;
   final int episodeNumber;
   final String episodeType;
   final String productionCode;
-  final int runtime;
+  final int? runtime;
   final int seasonNumber;
   final int showId;
-  final String stillPath;
+  final String? stillPath;
 
   LastEpisodeToAir({
     required this.id,
@@ -219,12 +207,12 @@ class ProductionCountry extends Equatable{
 }
 
 class Season extends Equatable{
-  final DateTime airDate;
+  final DateTime? airDate;
   final int episodeCount;
   final int id;
   final String name;
   final String overview;
-  final String posterPath;
+  final String? posterPath;
   final int seasonNumber;
   final double voteAverage;
 

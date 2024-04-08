@@ -1,13 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton/common/constants.dart';
-import 'package:ditonton/domain/entities/genre.dart';
-import 'package:ditonton/domain/entities/movie.dart';
-import 'package:ditonton/domain/entities/movie_detail.dart';
-import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
+import 'package:ditonton/domain/entities/tv_detail.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
+
+import '../provider/tv_detail_notifier.dart';
 
 class TvDetailPage extends StatefulWidget {
   static const ROUTE_NAME = '/detailtv';
@@ -25,9 +24,10 @@ class _TvDetailPageState extends State<TvDetailPage> {
     super.initState();
     Future.microtask(() {
       Provider.of<TvDetailNotifier>(context, listen: false)
-          .fetchMovieDetail(widget.id);
-      Provider.of<TvDetailNotifier>(context, listen: false)
-          .loadWatchlistStatus(widget.id);
+          .fetchTvDetail(widget.id.toString());
+      //TODO IMPLEMENT TV WATCHLIST
+      // Provider.of<TvDetailNotifier>(context, listen: false)
+      //     .loadWatchlistStatus(widget.id);
     });
   }
 
@@ -36,21 +36,22 @@ class _TvDetailPageState extends State<TvDetailPage> {
     return Scaffold(
       body: Consumer<TvDetailNotifier>(
         builder: (context, provider, child) {
-          if (provider.movieState == RequestState.Loading) {
+          if (provider.tvDetailState == RequestState.Loading) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else if (provider.movieState == RequestState.Loaded) {
-            final movie = provider.movie;
+          } else if (provider.tvDetailState == RequestState.Loaded) {
+            final tvDetail = provider.tvDetail;
             return SafeArea(
               child: DetailContent(
-                movie,
-                provider.movieRecommendations,
-                provider.isAddedToWatchlist,
+                tvDetail!,
+                //TODO IMPLEMENT TV WATCHLIST AND RECOMMENDATION
+                // provider.movieRecommendations,
+                // provider.isAddedToWatchlist,
               ),
             );
           } else {
-            return Text(provider.message);
+            return Text(provider.tvDetailErrorMsg);
           }
         },
       ),
@@ -59,11 +60,17 @@ class _TvDetailPageState extends State<TvDetailPage> {
 }
 
 class DetailContent extends StatelessWidget {
-  final MovieDetail movie;
-  final List<Movie> recommendations;
-  final bool isAddedWatchlist;
+  final TvDetail tvDetail;
+  //TODO IMPLEMENT TV WATCHLIST AND RECOMMENDATION
+  // final List<Movie> recommendations;
+  // final bool isAddedWatchlist;
 
-  DetailContent(this.movie, this.recommendations, this.isAddedWatchlist);
+  DetailContent(
+      this.tvDetail,
+      //TODO IMPLEMENT TV WATCHLIST AND RECOMMENDATION
+      // this.recommendations,
+      // this.isAddedWatchlist
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +78,7 @@ class DetailContent extends StatelessWidget {
     return Stack(
       children: [
         CachedNetworkImage(
-          imageUrl: 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+          imageUrl: 'https://image.tmdb.org/t/p/w500${tvDetail.posterPath}',
           width: screenWidth,
           placeholder: (context, url) => Center(
             child: CircularProgressIndicator(),
@@ -102,66 +109,70 @@ class DetailContent extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              movie.title,
+                              tvDetail.name,
                               style: kHeading5,
                             ),
                             ElevatedButton(
-                              onPressed: () async {
-                                if (!isAddedWatchlist) {
-                                  await Provider.of<MovieDetailNotifier>(
-                                          context,
-                                          listen: false)
-                                      .addWatchlist(movie);
-                                } else {
-                                  await Provider.of<MovieDetailNotifier>(
-                                          context,
-                                          listen: false)
-                                      .removeFromWatchlist(movie);
-                                }
-
-                                final message =
-                                    Provider.of<MovieDetailNotifier>(context,
-                                            listen: false)
-                                        .watchlistMessage;
-
-                                if (message ==
-                                        MovieDetailNotifier
-                                            .watchlistAddSuccessMessage ||
-                                    message ==
-                                        MovieDetailNotifier
-                                            .watchlistRemoveSuccessMessage) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(message)));
-                                } else {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          content: Text(message),
-                                        );
-                                      });
-                                }
-                              },
+                              onPressed: null,
+                              //TODO IMPLEMENT TV WATCHLIST AND RECOMMENDATION
+                              // () async {
+                              //   if (!isAddedWatchlist) {
+                              //     await Provider.of<MovieDetailNotifier>(
+                              //             context,
+                              //             listen: false)
+                              //         .addWatchlist(movie);
+                              //   } else {
+                              //     await Provider.of<MovieDetailNotifier>(
+                              //             context,
+                              //             listen: false)
+                              //         .removeFromWatchlist(movie);
+                              //   }
+                              //
+                              //   final message =
+                              //       Provider.of<MovieDetailNotifier>(context,
+                              //               listen: false)
+                              //           .watchlistMessage;
+                              //
+                              //   if (message ==
+                              //           MovieDetailNotifier
+                              //               .watchlistAddSuccessMessage ||
+                              //       message ==
+                              //           MovieDetailNotifier
+                              //               .watchlistRemoveSuccessMessage) {
+                              //     ScaffoldMessenger.of(context).showSnackBar(
+                              //         SnackBar(content: Text(message)));
+                              //   } else {
+                              //     showDialog(
+                              //         context: context,
+                              //         builder: (context) {
+                              //           return AlertDialog(
+                              //             content: Text(message),
+                              //           );
+                              //         });
+                              //   }
+                              // },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  isAddedWatchlist
-                                      ? Icon(Icons.check)
-                                      : Icon(Icons.add),
+                                  //TODO IMPLEMENT TV WATCHLIST AND RECOMMENDATION
+                                  // isAddedWatchlist
+                                  //     ? Icon(Icons.check)
+                                  //     : Icon(Icons.add),
+                                  Icon(Icons.add),
                                   Text('Watchlist'),
                                 ],
                               ),
                             ),
                             Text(
-                              _showGenres(movie.genres),
+                              _showGenres(tvDetail.genres),
                             ),
                             Text(
-                              _showDuration(movie.runtime),
+                              "${tvDetail.numberOfSeasons} Seasons",
                             ),
                             Row(
                               children: [
                                 RatingBarIndicator(
-                                  rating: movie.voteAverage / 2,
+                                  rating: tvDetail.voteAverage / 2,
                                   itemCount: 5,
                                   itemBuilder: (context, index) => Icon(
                                     Icons.star,
@@ -169,7 +180,7 @@ class DetailContent extends StatelessWidget {
                                   ),
                                   itemSize: 24,
                                 ),
-                                Text('${movie.voteAverage}')
+                                Text('${tvDetail.voteAverage}')
                               ],
                             ),
                             SizedBox(height: 16),
@@ -178,69 +189,70 @@ class DetailContent extends StatelessWidget {
                               style: kHeading6,
                             ),
                             Text(
-                              movie.overview,
+                              tvDetail.overview,
                             ),
                             SizedBox(height: 16),
                             Text(
                               'Recommendations',
                               style: kHeading6,
                             ),
-                            Consumer<MovieDetailNotifier>(
-                              builder: (context, data, child) {
-                                if (data.recommendationState ==
-                                    RequestState.Loading) {
-                                  return Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                } else if (data.recommendationState ==
-                                    RequestState.Error) {
-                                  return Text(data.message);
-                                } else if (data.recommendationState ==
-                                    RequestState.Loaded) {
-                                  return Container(
-                                    height: 150,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) {
-                                        final movie = recommendations[index];
-                                        return Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.pushReplacementNamed(
-                                                context,
-                                                TvDetailPage.ROUTE_NAME,
-                                                arguments: movie.id,
-                                              );
-                                            },
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(8),
-                                              ),
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                    'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                                                placeholder: (context, url) =>
-                                                    Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Icon(Icons.error),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      itemCount: recommendations.length,
-                                    ),
-                                  );
-                                } else {
-                                  return Container();
-                                }
-                              },
-                            ),
+                            //TODO IMPLEMENT TV WATCHLIST AND RECOMMENDATION
+                            // Consumer<MovieDetailNotifier>(
+                            //   builder: (context, data, child) {
+                            //     if (data.recommendationState ==
+                            //         RequestState.Loading) {
+                            //       return Center(
+                            //         child: CircularProgressIndicator(),
+                            //       );
+                            //     } else if (data.recommendationState ==
+                            //         RequestState.Error) {
+                            //       return Text(data.message);
+                            //     } else if (data.recommendationState ==
+                            //         RequestState.Loaded) {
+                            //       return Container(
+                            //         height: 150,
+                            //         child: ListView.builder(
+                            //           scrollDirection: Axis.horizontal,
+                            //           itemBuilder: (context, index) {
+                            //             final movie = recommendations[index];
+                            //             return Padding(
+                            //               padding: const EdgeInsets.all(4.0),
+                            //               child: InkWell(
+                            //                 onTap: () {
+                            //                   Navigator.pushReplacementNamed(
+                            //                     context,
+                            //                     TvDetailPage.ROUTE_NAME,
+                            //                     arguments: movie.id,
+                            //                   );
+                            //                 },
+                            //                 child: ClipRRect(
+                            //                   borderRadius: BorderRadius.all(
+                            //                     Radius.circular(8),
+                            //                   ),
+                            //                   child: CachedNetworkImage(
+                            //                     imageUrl:
+                            //                         'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                            //                     placeholder: (context, url) =>
+                            //                         Center(
+                            //                       child:
+                            //                           CircularProgressIndicator(),
+                            //                     ),
+                            //                     errorWidget:
+                            //                         (context, url, error) =>
+                            //                             Icon(Icons.error),
+                            //                   ),
+                            //                 ),
+                            //               ),
+                            //             );
+                            //           },
+                            //           itemCount: recommendations.length,
+                            //         ),
+                            //       );
+                            //     } else {
+                            //       return Container();
+                            //     }
+                            //   },
+                            // ),
                           ],
                         ),
                       ),
@@ -290,16 +302,5 @@ class DetailContent extends StatelessWidget {
     }
 
     return result.substring(0, result.length - 2);
-  }
-
-  String _showDuration(int runtime) {
-    final int hours = runtime ~/ 60;
-    final int minutes = runtime % 60;
-
-    if (hours > 0) {
-      return '${hours}h ${minutes}m';
-    } else {
-      return '${minutes}m';
-    }
   }
 }

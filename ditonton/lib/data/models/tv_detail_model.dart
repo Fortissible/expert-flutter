@@ -11,20 +11,16 @@ class TvDetailModel {
   final String backdropPath;
   final List<dynamic> createdBy;
   final List<int> episodeRunTime;
-  final DateTime firstAirDate;
   final List<Genre> genres;
   final String homepage;
   final int id;
   final bool inProduction;
   final List<String> languages;
-  final DateTime lastAirDate;
-  final LastEpisodeToAir lastEpisodeToAir;
   final String name;
   final dynamic nextEpisodeToAir;
   final List<Network> networks;
   final int numberOfEpisodes;
   final int numberOfSeasons;
-  final List<OriginCountry> originCountry;
   final String originalLanguage;
   final String originalName;
   final String overview;
@@ -45,20 +41,16 @@ class TvDetailModel {
     required this.backdropPath,
     required this.createdBy,
     required this.episodeRunTime,
-    required this.firstAirDate,
     required this.genres,
     required this.homepage,
     required this.id,
     required this.inProduction,
     required this.languages,
-    required this.lastAirDate,
-    required this.lastEpisodeToAir,
     required this.name,
     required this.nextEpisodeToAir,
     required this.networks,
     required this.numberOfEpisodes,
     required this.numberOfSeasons,
-    required this.originCountry,
     required this.originalLanguage,
     required this.originalName,
     required this.overview,
@@ -80,20 +72,16 @@ class TvDetailModel {
     backdropPath: json["backdrop_path"],
     createdBy: List<dynamic>.from(json["created_by"].map((x) => x)),
     episodeRunTime: List<int>.from(json["episode_run_time"].map((x) => x)),
-    firstAirDate: DateTime.parse(json["first_air_date"]),
     genres: List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x))),
     homepage: json["homepage"],
     id: json["id"],
     inProduction: json["in_production"],
     languages: List<String>.from(json["languages"].map((x) => x)),
-    lastAirDate: DateTime.parse(json["last_air_date"]),
-    lastEpisodeToAir: LastEpisodeToAir.fromJson(json["last_episode_to_air"]),
     name: json["name"],
     nextEpisodeToAir: json["next_episode_to_air"],
     networks: List<Network>.from(json["networks"].map((x) => Network.fromJson(x))),
     numberOfEpisodes: json["number_of_episodes"],
     numberOfSeasons: json["number_of_seasons"],
-    originCountry: List<OriginCountry>.from(json["origin_country"].map((x) => originCountryValues.map[x]!)),
     originalLanguage: json["original_language"],
     originalName: json["original_name"],
     overview: json["overview"],
@@ -115,20 +103,16 @@ class TvDetailModel {
     "backdrop_path": backdropPath,
     "created_by": List<dynamic>.from(createdBy.map((x) => x)),
     "episode_run_time": List<dynamic>.from(episodeRunTime.map((x) => x)),
-    "first_air_date": "${firstAirDate.year.toString().padLeft(4, '0')}-${firstAirDate.month.toString().padLeft(2, '0')}-${firstAirDate.day.toString().padLeft(2, '0')}",
     "genres": List<dynamic>.from(genres.map((x) => x.toJson())),
     "homepage": homepage,
     "id": id,
     "in_production": inProduction,
     "languages": List<dynamic>.from(languages.map((x) => x)),
-    "last_air_date": "${lastAirDate.year.toString().padLeft(4, '0')}-${lastAirDate.month.toString().padLeft(2, '0')}-${lastAirDate.day.toString().padLeft(2, '0')}",
-    "last_episode_to_air": lastEpisodeToAir.toJson(),
     "name": name,
     "next_episode_to_air": nextEpisodeToAir,
     "networks": List<dynamic>.from(networks.map((x) => x.toJson())),
     "number_of_episodes": numberOfEpisodes,
     "number_of_seasons": numberOfSeasons,
-    "origin_country": List<dynamic>.from(originCountry.map((x) => originCountryValues.reverse[x])),
     "original_language": originalLanguage,
     "original_name": originalName,
     "overview": overview,
@@ -150,7 +134,6 @@ class TvDetailModel {
       backdropPath: backdropPath,
       createdBy: createdBy,
       episodeRunTime: episodeRunTime,
-      firstAirDate: firstAirDate,
       genres: genres.map(
               (genre) => ent.Genre(id: genre.id, name: genre.name)
       ).toList(),
@@ -158,22 +141,6 @@ class TvDetailModel {
       id: id,
       inProduction: inProduction,
       languages: languages,
-      lastAirDate: lastAirDate,
-      lastEpisodeToAir: ent.LastEpisodeToAir(
-          id: lastEpisodeToAir.id,
-          name: lastEpisodeToAir.name,
-          overview: lastEpisodeToAir.overview,
-          voteAverage: lastEpisodeToAir.voteAverage,
-          voteCount: lastEpisodeToAir.voteCount,
-          airDate: lastEpisodeToAir.airDate,
-          episodeNumber: lastEpisodeToAir.episodeNumber,
-          productionCode: lastEpisodeToAir.productionCode,
-          episodeType: lastEpisodeToAir.episodeType,
-          seasonNumber: lastEpisodeToAir.seasonNumber,
-          runtime: lastEpisodeToAir.runtime,
-          showId: lastEpisodeToAir.showId,
-          stillPath: lastEpisodeToAir.stillPath
-      ),
       name: name,
       nextEpisodeToAir: nextEpisodeToAir,
       networks: networks.map(
@@ -181,14 +148,15 @@ class TvDetailModel {
                   id: network.id,
                   logoPath: network.logoPath,
                   name: network.name,
-                  originCountry: network.originCountry as ent.OriginCountry
+                  originCountry: network.originCountry == OriginCountry.JP
+                    ? ent.OriginCountry.JP
+                    : network.originCountry == OriginCountry.KR
+                      ? ent.OriginCountry.KR
+                      : ent.OriginCountry.US
               )
       ).toList(),
       numberOfEpisodes: numberOfEpisodes,
       numberOfSeasons: numberOfSeasons,
-      originCountry: originCountry.map(
-              (e) => e as ent.OriginCountry
-      ).toList(),
       originalLanguage: originalLanguage,
       originalName: originalName,
       overview: overview,
@@ -199,12 +167,20 @@ class TvDetailModel {
                   id: prodsCompany.id,
                   logoPath: prodsCompany.logoPath,
                   name: prodsCompany.name,
-                  originCountry: prodsCompany.originCountry as ent.OriginCountry
+                  originCountry: prodsCompany.originCountry == OriginCountry.JP
+                      ? ent.OriginCountry.JP
+                      : prodsCompany.originCountry == OriginCountry.KR
+                        ? ent.OriginCountry.KR
+                        : ent.OriginCountry.US
               )
       ).toList(),
       productionCountries: productionCountries.map(
               (prodsCountry) => ent.ProductionCountry(
-                  iso31661: prodsCountry.iso31661 as ent.OriginCountry,
+                  iso31661: prodsCountry.iso31661 == OriginCountry.JP
+                      ? ent.OriginCountry.JP
+                      : prodsCountry.iso31661 == OriginCountry.KR
+                        ? ent.OriginCountry.KR
+                        : ent.OriginCountry.US,
                   name: prodsCountry.name
               )
       ).toList(),
@@ -259,16 +235,16 @@ class LastEpisodeToAir {
   final int id;
   final String name;
   final String overview;
-  final int voteAverage;
+  final double voteAverage;
   final int voteCount;
   final DateTime airDate;
   final int episodeNumber;
   final String episodeType;
   final String productionCode;
-  final int runtime;
+  final int? runtime;
   final int seasonNumber;
   final int showId;
-  final String stillPath;
+  final String? stillPath;
 
   LastEpisodeToAir({
     required this.id,
@@ -323,7 +299,7 @@ class Network {
   final int id;
   final String? logoPath;
   final String name;
-  final OriginCountry originCountry;
+  final OriginCountry? originCountry;
 
   Network({
     required this.id,
@@ -336,7 +312,7 @@ class Network {
     id: json["id"],
     logoPath: json["logo_path"],
     name: json["name"],
-    originCountry: originCountryValues.map[json["origin_country"]]!,
+    originCountry: originCountryValues.map[json["origin_country"]],
   );
 
   Map<String, dynamic> toJson() => {
@@ -360,7 +336,7 @@ final originCountryValues = EnumValues({
 });
 
 class ProductionCountry {
-  final OriginCountry iso31661;
+  final OriginCountry? iso31661;
   final String name;
 
   ProductionCountry({
@@ -369,7 +345,7 @@ class ProductionCountry {
   });
 
   factory ProductionCountry.fromJson(Map<String, dynamic> json) => ProductionCountry(
-    iso31661: originCountryValues.map[json["iso_3166_1"]]!,
+    iso31661: originCountryValues.map[json["iso_3166_1"]],
     name: json["name"],
   );
 
@@ -380,12 +356,12 @@ class ProductionCountry {
 }
 
 class Season {
-  final DateTime airDate;
+  final DateTime? airDate;
   final int episodeCount;
   final int id;
   final String name;
   final String overview;
-  final String posterPath;
+  final String? posterPath;
   final int seasonNumber;
   final double voteAverage;
 
@@ -401,7 +377,7 @@ class Season {
   });
 
   factory Season.fromJson(Map<String, dynamic> json) => Season(
-    airDate: DateTime.parse(json["air_date"]),
+    airDate: json["air_date"] != null ? DateTime.parse(json["air_date"]) : null,
     episodeCount: json["episode_count"],
     id: json["id"],
     name: json["name"],
@@ -412,7 +388,7 @@ class Season {
   );
 
   Map<String, dynamic> toJson() => {
-    "air_date": "${airDate.year.toString().padLeft(4, '0')}-${airDate.month.toString().padLeft(2, '0')}-${airDate.day.toString().padLeft(2, '0')}",
+    "air_date": "${airDate?.year.toString().padLeft(4, '0')}-${airDate?.month.toString().padLeft(2, '0')}-${airDate?.day.toString().padLeft(2, '0')}",
     "episode_count": episodeCount,
     "id": id,
     "name": name,
