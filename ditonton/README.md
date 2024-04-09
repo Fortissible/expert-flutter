@@ -50,3 +50,10 @@ Jika kamu menerapkan modular pada project, Anda dapat memanfaatkan berkas `test.
     Proses ini akan men-*generate* berkas `lcov.info` dan folder `coverage` terkait dengan laporan coverage.
 4. Tunggu proses testing selesai hingga muncul web terkait laporan coverage.
 
+## Run code coverage generate HTML from Git Perl
+Generate codecoverage HTML summary dari dengan Perl dari GIT:
+1. Install GIT
+2. Masuk ke directory "C:\Program Files\Git\usr\bin"
+3. Buat genhtml.perl file dan copy isi sesuai file genhtml.perl di project ini
+4. Generate dengan melalui Git Bash CMD dan pindah ke direktori project
+5. Generate dengan command berikut : "./genhtml2.perl ./coverage/lcov.info -o coverage/html"
