@@ -1,3 +1,4 @@
+import 'package:ditonton/data/models/seasons.dart';
 import 'package:ditonton/domain/usecases/get_tv_detail.dart';
 import 'package:ditonton/domain/usecases/get_tv_recommendation.dart';
 import 'package:ditonton/domain/usecases/remove_watchlist_tv.dart';
@@ -39,6 +40,12 @@ class TvDetailNotifier extends ChangeNotifier {
   String _watchlistMessage = '';
   String get watchlistMessage => _watchlistMessage;
 
+  Seasons _seasons = Seasons(
+      expandedValue: ["Season 0 - 0 Episodes"],
+      headerValue: "0 Seasons"
+  );
+  Seasons get seasons => _seasons;
+
   TvDetailNotifier({
     required this.getTvDetail,
     required this.getTvRecommendation,
@@ -59,6 +66,14 @@ class TvDetailNotifier extends ChangeNotifier {
               notifyListeners();
             },
             (success) {
+              List<String> expandedValue = [];
+              for(var i = 0; i < success.seasons.length; i++){
+                expandedValue.add("• Season ${i+1} - ${success.seasons[i].episodeCount} Episode\n");
+              }
+              _seasons = Seasons(
+                  expandedValue: expandedValue,
+                  headerValue: "${success.seasons.length} Seasons"
+              );
               _tvDetailState = RequestState.Loaded;
               _tvDetail = success;
               notifyListeners();
@@ -70,7 +85,6 @@ class TvDetailNotifier extends ChangeNotifier {
   Future<void> fetchTvRecommendations(String id) async {
     _tvRecommendationState = RequestState.Loading;
     notifyListeners();
-    print("TVs ID: $id");
     final result = await getTvRecommendation.execute(id);
     result.fold(
             (failure) {
@@ -79,7 +93,6 @@ class TvDetailNotifier extends ChangeNotifier {
               notifyListeners();
         },
           (success) {
-              print("TV RECOMMENDATIONS SUCCESS");
               print(success);
               _tvRecommendationState = RequestState.Loaded;
               _tvRecommendations = success;
@@ -121,6 +134,11 @@ class TvDetailNotifier extends ChangeNotifier {
   Future<void> loadWatchlistStatus(int id) async {
     final result = await getWatchListStatus.execute(id);
     _isAddedtoWatchlist = result;
+    notifyListeners();
+  }
+
+  void expandSeasonsDetail(bool isExpanded) {
+    _seasons.isExpanded = isExpanded;
     notifyListeners();
   }
 }

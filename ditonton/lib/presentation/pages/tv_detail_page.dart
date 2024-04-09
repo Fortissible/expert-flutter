@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton/common/constants.dart';
+import 'package:ditonton/data/models/seasons.dart';
 import 'package:ditonton/domain/entities/tv_detail.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:flutter/material.dart';
@@ -161,8 +162,33 @@ class DetailContent extends StatelessWidget {
                             Text(
                               _showGenres(tvDetail.genres),
                             ),
-                            Text(
-                              "${tvDetail.numberOfSeasons} Seasons",
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: Consumer<TvDetailNotifier>(
+                                  builder: (ctx, provider, child){
+                                    return ExpansionPanelList(
+                                      expansionCallback: (int index, bool isExpanded) {
+                                        provider.expandSeasonsDetail(isExpanded);
+                                      },
+                                      elevation: 0,
+                                      children: [
+                                        ExpansionPanel(
+                                          headerBuilder: (BuildContext context, bool isExpanded) {
+                                            return ListTile(
+                                              title: Text(provider.seasons.headerValue),
+                                            );
+                                          },
+                                          body: Column(
+                                            children: [
+                                              ..._generateSeasonDetailTile(provider.seasons.expandedValue)
+                                            ],
+                                          ),
+                                          isExpanded: provider.seasons.isExpanded,
+                                        )
+                                      ],
+                                    );
+                                  }
+                              ),
                             ),
                             Row(
                               children: [
@@ -283,6 +309,18 @@ class DetailContent extends StatelessWidget {
         )
       ],
     );
+  }
+
+  List<Widget> _generateSeasonDetailTile(List<String> seasonDetail){
+    final listTile = seasonDetail.map(
+            (seasonDetail) => ListTile(
+              onTap: (){
+                //TODO SHOW SEASONS DETAIL
+              },
+              title: Text(seasonDetail),
+            )
+    ).toList();
+    return listTile;
   }
 
   String _showGenres(List<Genre> genres) {
