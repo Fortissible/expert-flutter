@@ -3,6 +3,8 @@ import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/data/models/seasons.dart';
 import 'package:ditonton/domain/entities/tv_detail.dart';
 import 'package:ditonton/common/state_enum.dart';
+import 'package:ditonton/domain/entities/tv_season_detail_args.dart';
+import 'package:ditonton/presentation/pages/tv_season_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
@@ -50,6 +52,7 @@ class _TvDetailPageState extends State<TvDetailPage> {
                 tvDetail!,
                 provider.tvRecommendations,
                 provider.isAddedToWatchlist,
+                context
               ),
             );
           } else {
@@ -65,11 +68,13 @@ class DetailContent extends StatelessWidget {
   final TvDetail tvDetail;
   final List<Tv> recommendations;
   final bool isAddedWatchlist;
+  final BuildContext context;
 
   DetailContent(
       this.tvDetail,
       this.recommendations,
-      this.isAddedWatchlist
+      this.isAddedWatchlist,
+      this.context
       );
 
   @override
@@ -180,7 +185,7 @@ class DetailContent extends StatelessWidget {
                                           },
                                           body: Column(
                                             children: [
-                                              ..._generateSeasonDetailTile(provider.seasons.expandedValue)
+                                              ..._generateSeasonDetailTile(provider)
                                             ],
                                           ),
                                           isExpanded: provider.seasons.isExpanded,
@@ -311,15 +316,30 @@ class DetailContent extends StatelessWidget {
     );
   }
 
-  List<Widget> _generateSeasonDetailTile(List<String> seasonDetail){
-    final listTile = seasonDetail.map(
-            (seasonDetail) => ListTile(
-              onTap: (){
-                //TODO SHOW SEASONS DETAIL
-              },
-              title: Text(seasonDetail),
-            )
-    ).toList();
+  List<Widget> _generateSeasonDetailTile(TvDetailNotifier provider){
+    final seasonDetail = provider.seasons.expandedValue;
+
+    final listTile = <Widget>[];
+
+    for(var i = 0; i<seasonDetail.length; i++){
+      listTile.add(
+          ListTile(
+            onTap: (){
+              Navigator.pushNamed(
+                context,
+                TvSeasonDetailPage.ROUTE_NAME,
+                arguments: TvSeasonDetailArguments(
+                    tvSeriesName: provider.tvDetail?.name ?? "",
+                    defaultPoster: provider.tvDetail?.posterPath ?? "",
+                    tvId: provider.tvDetail?.id ?? 0,
+                    seasonId: i+1
+                ),
+              );
+            },
+            title: Text(seasonDetail[i]),
+          )
+      );
+    }
     return listTile;
   }
 

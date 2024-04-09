@@ -6,12 +6,14 @@ import 'package:http/http.dart' as http;
 
 import '../models/tv_detail_model.dart';
 import '../models/tv_response.dart';
+import '../models/tv_season_detail_model.dart';
 
 abstract class TvRemoteDataSource {
   Future<List<TvModel>> getNowPlayingTvSeries();
   Future<List<TvModel>> getTopRatedTvSeries();
   Future<List<TvModel>> getPopularTvSeries();
   Future<TvDetailModel> getDetailTvSeries(String tvId);
+  Future<TvSeasonDetailModel> getSeasonDetailTvSeries(String tvId, String seasonId);
   Future<List<TvModel>> searchTvSeries(String query);
   Future<List<TvModel>> getTvRecommendation(String TvId);
 }
@@ -24,6 +26,7 @@ class TvRemoteDataSourceImpl implements TvRemoteDataSource {
   static const ENDPOINT_URL_TV_POPULAR = "/tv/popular";
   static const ENDPOINT_URL_TV_ONTHEAIR= "/tv/on_the_air";
   static const ENDPOINT_URL_TV_DETAIL= "/tv";
+  static const ENDPOINT_URL_TV_SEASON_DETAIL= "/season";
   static const ENDPOINT_URL_TV_SEARCH = "/search/tv";
   static const ENDPOINT_URL_TV_RECOMMENDATION = "/recommendations";
 
@@ -78,6 +81,20 @@ class TvRemoteDataSourceImpl implements TvRemoteDataSource {
 
     if (response.statusCode == 200) {
       return TvDetailModel.fromJson(json.decode(response.body));
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<TvSeasonDetailModel> getSeasonDetailTvSeries(String tvId, String seasonId) async {
+    final response =
+    await client.get(
+        Uri.parse('$BASE_URL$ENDPOINT_URL_TV_DETAIL/$tvId$ENDPOINT_URL_TV_SEASON_DETAIL/$seasonId?$API_KEY')
+    );
+
+    if (response.statusCode == 200) {
+      return TvSeasonDetailModel.fromJson(json.decode(response.body));
     } else {
       throw ServerException();
     }
