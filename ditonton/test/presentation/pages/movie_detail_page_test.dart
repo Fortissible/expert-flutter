@@ -68,7 +68,7 @@ void main() {
     when(mockNotifier.recommendationState).thenReturn(RequestState.Loaded);
     when(mockNotifier.movieRecommendations).thenReturn(<Movie>[]);
     when(mockNotifier.isAddedToWatchlist).thenReturn(false);
-    when(mockNotifier.watchlistMessage).thenReturn('Added to Watchlist');
+    when(mockNotifier.watchlistMessage).thenReturn('Added to Movies Watchlist');
 
     final watchlistButton = find.byType(ElevatedButton);
 
@@ -80,7 +80,7 @@ void main() {
     await tester.pump();
 
     expect(find.byType(SnackBar), findsOneWidget);
-    expect(find.text('Added to Watchlist'), findsOneWidget);
+    expect(find.text('Added to Movies Watchlist'), findsOneWidget);
   });
 
   testWidgets(

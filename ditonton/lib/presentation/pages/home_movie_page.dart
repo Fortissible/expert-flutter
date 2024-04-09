@@ -122,7 +122,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               Navigator.pushNamed(
                   context,
                   SearchPage.ROUTE_NAME,
-                  arguments: _isTvSeriesContent ? "tv" : "movie",
+                  arguments: _isTvSeriesContent ? "Tv Series" : "Movies",
               );
             },
             icon: Icon(Icons.search),

@@ -28,9 +28,8 @@ class _TvDetailPageState extends State<TvDetailPage> {
           .fetchTvDetail(widget.id.toString());
       Provider.of<TvDetailNotifier>(context, listen: false)
           .fetchTvRecommendations(widget.id.toString());
-      //TODO IMPLEMENT TV WATCHLIST
-      // Provider.of<TvDetailNotifier>(context, listen: false)
-      //     .loadWatchlistStatus(widget.id);
+      Provider.of<TvDetailNotifier>(context, listen: false)
+          .loadWatchlistStatus(widget.id);
     });
   }
 
@@ -49,8 +48,7 @@ class _TvDetailPageState extends State<TvDetailPage> {
               child: DetailContent(
                 tvDetail!,
                 provider.tvRecommendations,
-                //TODO IMPLEMENT TV WATCHLIST
-                // provider.isAddedToWatchlist,
+                provider.isAddedToWatchlist,
               ),
             );
           } else {
@@ -65,14 +63,12 @@ class _TvDetailPageState extends State<TvDetailPage> {
 class DetailContent extends StatelessWidget {
   final TvDetail tvDetail;
   final List<Tv> recommendations;
-  //TODO IMPLEMENT TV WATCHLIST
-  // final bool isAddedWatchlist;
+  final bool isAddedWatchlist;
 
   DetailContent(
       this.tvDetail,
       this.recommendations,
-      //TODO IMPLEMENT TV WATCHLIST AND RECOMMENDATION
-      // this.isAddedWatchlist
+      this.isAddedWatchlist
       );
 
   @override
@@ -116,52 +112,48 @@ class DetailContent extends StatelessWidget {
                               style: kHeading5,
                             ),
                             ElevatedButton(
-                              onPressed: null,
-                              //TODO IMPLEMENT TV WATCHLIST AND RECOMMENDATION
-                              // () async {
-                              //   if (!isAddedWatchlist) {
-                              //     await Provider.of<MovieDetailNotifier>(
-                              //             context,
-                              //             listen: false)
-                              //         .addWatchlist(movie);
-                              //   } else {
-                              //     await Provider.of<MovieDetailNotifier>(
-                              //             context,
-                              //             listen: false)
-                              //         .removeFromWatchlist(movie);
-                              //   }
-                              //
-                              //   final message =
-                              //       Provider.of<MovieDetailNotifier>(context,
-                              //               listen: false)
-                              //           .watchlistMessage;
-                              //
-                              //   if (message ==
-                              //           MovieDetailNotifier
-                              //               .watchlistAddSuccessMessage ||
-                              //       message ==
-                              //           MovieDetailNotifier
-                              //               .watchlistRemoveSuccessMessage) {
-                              //     ScaffoldMessenger.of(context).showSnackBar(
-                              //         SnackBar(content: Text(message)));
-                              //   } else {
-                              //     showDialog(
-                              //         context: context,
-                              //         builder: (context) {
-                              //           return AlertDialog(
-                              //             content: Text(message),
-                              //           );
-                              //         });
-                              //   }
-                              // },
+                              onPressed: () async {
+                                if (!isAddedWatchlist) {
+                                  await Provider.of<TvDetailNotifier>(
+                                      context,
+                                      listen: false)
+                                      .addWatchlist(tvDetail);
+                                } else {
+                                  await Provider.of<TvDetailNotifier>(
+                                      context,
+                                      listen: false)
+                                      .removeFromWatchlist(tvDetail);
+                                }
+
+                                final message =
+                                    Provider.of<TvDetailNotifier>(context,
+                                        listen: false)
+                                        .watchlistMessage;
+
+                                if (message ==
+                                    TvDetailNotifier
+                                        .watchlistAddSuccessMessage ||
+                                    message ==
+                                        TvDetailNotifier
+                                            .watchlistRemoveSuccessMessage) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text(message)));
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: Text(message),
+                                        );
+                                      });
+                                }
+                              },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  //TODO IMPLEMENT TV WATCHLIST AND RECOMMENDATION
-                                  // isAddedWatchlist
-                                  //     ? Icon(Icons.check)
-                                  //     : Icon(Icons.add),
-                                  Icon(Icons.add),
+                                  isAddedWatchlist
+                                      ? Icon(Icons.check)
+                                      : Icon(Icons.add),
                                   Text('Watchlist'),
                                 ],
                               ),

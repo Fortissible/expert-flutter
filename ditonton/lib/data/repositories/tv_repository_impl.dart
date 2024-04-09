@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:ditonton/common/failure.dart';
 import 'package:ditonton/data/datasources/tv_local_data_source.dart';
 import 'package:ditonton/data/datasources/tv_remote_data_source.dart';
+import 'package:ditonton/data/models/tv_table.dart';
 import 'package:ditonton/domain/entities/tv.dart';
 import 'package:ditonton/domain/entities/tv_detail.dart';
 import 'package:ditonton/domain/repositories/tv_repository.dart';
@@ -91,5 +92,39 @@ class TvRepositoryImpl implements TvRepository{
     }
   }
 
-  //TODO CREATE WATCHLIST FOR TV SERIES
+  @override
+  Future<Either<Failure, List<Tv>>> getWatchlistTv() async {
+    final result = await tvLocalDataSource.getWatchlistTv();
+    return Right(result.map((data) => data.toEntity()).toList());
+  }
+
+  @override
+  Future<Either<Failure, String>> insertWatchlistTv(TvDetail tv) async {
+    try {
+      final result =
+        await tvLocalDataSource.insertTvWatchlist(TvTable.fromEntity(tv));
+      return Right(result);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> removeWatchlistTv(TvDetail tv) async {
+    try {
+      final result =
+          await tvLocalDataSource.removeTvWatchlist(TvTable.fromEntity(tv));
+      return Right(result);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    }
+  }
+
+  @override
+  Future<bool> isAddedToWatchlist(int id) async {
+    final result = await tvLocalDataSource.getTvById(id);
+    return result != null;
+  }
 }

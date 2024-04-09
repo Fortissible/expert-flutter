@@ -19,7 +19,7 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search'),
+        title: Text('Search $searchType'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -28,14 +28,14 @@ class SearchPage extends StatelessWidget {
           children: [
             TextField(
               onSubmitted: (query) {
-                searchType == "movie"
+                searchType == "Movie"
                     ? Provider.of<MovieSearchNotifier>(context, listen: false)
                     .fetchMovieSearch(query)
                     : Provider.of<TvSearchNotifier>(context, listen: false)
                     .fetchSearchTv(query);
               },
               decoration: InputDecoration(
-                hintText: 'Search title',
+                hintText: 'Search $searchType title',
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(),
               ),
@@ -46,7 +46,7 @@ class SearchPage extends StatelessWidget {
               'Search Result',
               style: kHeading6,
             ),
-            searchType == "movie"
+            searchType == "Movie"
               ? Consumer<MovieSearchNotifier>(
                 builder: (context, data, child) {
                   if (data.state == RequestState.Loading) {

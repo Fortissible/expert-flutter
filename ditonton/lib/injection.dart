@@ -19,8 +19,12 @@ import 'package:ditonton/domain/usecases/get_tv_detail.dart';
 import 'package:ditonton/domain/usecases/get_tv_recommendation.dart';
 import 'package:ditonton/domain/usecases/get_watchlist_movies.dart';
 import 'package:ditonton/domain/usecases/get_watchlist_status.dart';
+import 'package:ditonton/domain/usecases/get_watchlist_tv.dart';
+import 'package:ditonton/domain/usecases/get_watchlist_tv_status.dart';
 import 'package:ditonton/domain/usecases/remove_watchlist.dart';
+import 'package:ditonton/domain/usecases/remove_watchlist_tv.dart';
 import 'package:ditonton/domain/usecases/save_watchlist.dart';
+import 'package:ditonton/domain/usecases/save_watchlist_tv.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
 import 'package:ditonton/domain/usecases/search_tv.dart';
 import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
@@ -32,6 +36,7 @@ import 'package:ditonton/presentation/provider/tv_detail_notifier.dart';
 import 'package:ditonton/presentation/provider/tv_list_notifier.dart';
 import 'package:ditonton/presentation/provider/tv_search_notifier.dart';
 import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
+import 'package:ditonton/presentation/provider/watchlist_tv_notifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 
@@ -91,8 +96,16 @@ void init() {
   locator.registerFactory(
           () => TvDetailNotifier(
               getTvDetail: locator(),
-              getTvRecommendation: locator()
+              getTvRecommendation: locator(),
+              getWatchListStatus: locator(),
+              saveWatchlist: locator(),
+              removeWatchlist: locator()
           )
+  );
+  locator.registerFactory(
+        () => WatchlistTvNotifier(
+      getWatchlistTv: locator(),
+    ),
   );
 
   // use case
@@ -124,6 +137,18 @@ void init() {
   );
   locator.registerLazySingleton(
           () => GetTvRecommendation(repository: locator())
+  );
+  locator.registerLazySingleton(
+          () => GetWatchlistTv(locator())
+  );
+  locator.registerLazySingleton(
+          () => GetWatchListTvStatus(locator())
+  );
+  locator.registerLazySingleton(
+          () => RemoveWatchlistTv(locator())
+  );
+  locator.registerLazySingleton(
+          () => SaveWatchlistTv(locator())
   );
 
   // repository
