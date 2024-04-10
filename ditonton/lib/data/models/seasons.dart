@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-class Seasons extends Equatable {
+class Seasons {
   Seasons({
     required this.expandedValue,
     required this.headerValue,
@@ -10,7 +8,4 @@ class Seasons extends Equatable {
   List<String> expandedValue;
   String headerValue;
   bool isExpanded;
-
-  @override
-  List<Object?> get props => [expandedValue, headerValue, isExpanded];
 }

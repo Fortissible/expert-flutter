@@ -111,7 +111,7 @@ class Genre extends Equatable{
   ];
 }
 
-class LastEpisodeToAir extends Equatable{
+class LastEpisodeToAir {
   final int id;
   final String name;
   final String overview;
@@ -141,23 +141,6 @@ class LastEpisodeToAir extends Equatable{
     required this.showId,
     required this.stillPath,
   });
-
-  @override
-  List<Object?> get props => [
-    id,
-    name,
-    overview,
-    voteAverage,
-    voteCount,
-    airDate,
-    episodeNumber,
-    episodeType,
-    productionCode,
-    runtime,
-    seasonNumber,
-    showId,
-    stillPath,
-  ];
 }
 
 class Network extends Equatable{
@@ -184,12 +167,6 @@ enum OriginCountry {
   KR,
   US
 }
-
-final originCountryValues = EnumValues({
-  "JP": OriginCountry.JP,
-  "KR": OriginCountry.KR,
-  "US": OriginCountry.US
-});
 
 class ProductionCountry extends Equatable{
   final OriginCountry iso31661;
@@ -262,9 +239,4 @@ class EnumValues<T> {
   late Map<T, String> reverseMap;
 
   EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

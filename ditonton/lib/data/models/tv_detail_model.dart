@@ -1,12 +1,7 @@
-import 'dart:convert';
-
 import 'package:ditonton/domain/entities/tv_detail.dart' as ent;
+import 'package:equatable/equatable.dart';
 
-TvDetailModel tvDetailResponseFromJson(String str) => TvDetailModel.fromJson(json.decode(str));
-
-String tvDetailResponseToJson(TvDetailModel data) => json.encode(data.toJson());
-
-class TvDetailModel {
+class TvDetailModel extends Equatable {
   final bool adult;
   final String backdropPath;
   final List<dynamic> createdBy;
@@ -98,37 +93,6 @@ class TvDetailModel {
     voteCount: json["vote_count"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "adult": adult,
-    "backdrop_path": backdropPath,
-    "created_by": List<dynamic>.from(createdBy.map((x) => x)),
-    "episode_run_time": List<dynamic>.from(episodeRunTime.map((x) => x)),
-    "genres": List<dynamic>.from(genres.map((x) => x.toJson())),
-    "homepage": homepage,
-    "id": id,
-    "in_production": inProduction,
-    "languages": List<dynamic>.from(languages.map((x) => x)),
-    "name": name,
-    "next_episode_to_air": nextEpisodeToAir,
-    "networks": List<dynamic>.from(networks.map((x) => x.toJson())),
-    "number_of_episodes": numberOfEpisodes,
-    "number_of_seasons": numberOfSeasons,
-    "original_language": originalLanguage,
-    "original_name": originalName,
-    "overview": overview,
-    "popularity": popularity,
-    "poster_path": posterPath,
-    "production_companies": List<dynamic>.from(productionCompanies.map((x) => x.toJson())),
-    "production_countries": List<dynamic>.from(productionCountries.map((x) => x.toJson())),
-    "seasons": List<dynamic>.from(seasons.map((x) => x.toJson())),
-    "spoken_languages": List<dynamic>.from(spokenLanguages.map((x) => x.toJson())),
-    "status": status,
-    "tagline": tagline,
-    "type": type,
-    "vote_average": voteAverage,
-    "vote_count": voteCount,
-  };
-
   ent.TvDetail toEntity() => ent.TvDetail(
       adult: adult,
       backdropPath: backdropPath,
@@ -209,9 +173,41 @@ class TvDetailModel {
       voteAverage: voteAverage,
       voteCount: voteCount
   );
+
+  @override
+  List<Object?> get props => [
+    adult,
+    backdropPath,
+    createdBy,
+    episodeRunTime,
+    genres,
+    homepage,
+    id,
+    inProduction,
+    languages,
+    name,
+    nextEpisodeToAir,
+    networks,
+    numberOfEpisodes,
+    numberOfSeasons,
+    originalLanguage,
+    originalName,
+    overview,
+    popularity,
+    posterPath,
+    productionCompanies,
+    productionCountries,
+    seasons,
+    spokenLanguages,
+    status,
+    tagline,
+    type,
+    voteAverage,
+    voteCount,
+  ];
 }
 
-class Genre {
+class Genre extends Equatable{
   final int id;
   final String name;
 
@@ -229,6 +225,9 @@ class Genre {
     "id": id,
     "name": name,
   };
+
+  @override
+  List<Object?> get props => [id, name];
 }
 
 class LastEpisodeToAir {
@@ -261,41 +260,9 @@ class LastEpisodeToAir {
     required this.showId,
     required this.stillPath,
   });
-
-  factory LastEpisodeToAir.fromJson(Map<String, dynamic> json) => LastEpisodeToAir(
-    id: json["id"],
-    name: json["name"],
-    overview: json["overview"],
-    voteAverage: json["vote_average"],
-    voteCount: json["vote_count"],
-    airDate: DateTime.parse(json["air_date"]),
-    episodeNumber: json["episode_number"],
-    episodeType: json["episode_type"],
-    productionCode: json["production_code"],
-    runtime: json["runtime"],
-    seasonNumber: json["season_number"],
-    showId: json["show_id"],
-    stillPath: json["still_path"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "overview": overview,
-    "vote_average": voteAverage,
-    "vote_count": voteCount,
-    "air_date": "${airDate.year.toString().padLeft(4, '0')}-${airDate.month.toString().padLeft(2, '0')}-${airDate.day.toString().padLeft(2, '0')}",
-    "episode_number": episodeNumber,
-    "episode_type": episodeType,
-    "production_code": productionCode,
-    "runtime": runtime,
-    "season_number": seasonNumber,
-    "show_id": showId,
-    "still_path": stillPath,
-  };
 }
 
-class Network {
+class Network extends Equatable{
   final int id;
   final String? logoPath;
   final String name;
@@ -315,12 +282,14 @@ class Network {
     originCountry: originCountryValues.map[json["origin_country"]],
   );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "logo_path": logoPath,
-    "name": name,
-    "origin_country": originCountryValues.reverse[originCountry],
-  };
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+    id,
+    logoPath,
+    name,
+    originCountry
+  ];
 }
 
 enum OriginCountry {
@@ -335,7 +304,7 @@ final originCountryValues = EnumValues({
   "US": OriginCountry.US
 });
 
-class ProductionCountry {
+class ProductionCountry extends Equatable{
   final OriginCountry? iso31661;
   final String name;
 
@@ -349,13 +318,11 @@ class ProductionCountry {
     name: json["name"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "iso_3166_1": originCountryValues.reverse[iso31661],
-    "name": name,
-  };
+  @override
+  List<Object?> get props => [name, iso31661];
 }
 
-class Season {
+class Season extends Equatable{
   final DateTime? airDate;
   final int episodeCount;
   final int id;
@@ -387,19 +354,21 @@ class Season {
     voteAverage: json["vote_average"]?.toDouble(),
   );
 
-  Map<String, dynamic> toJson() => {
-    "air_date": "${airDate?.year.toString().padLeft(4, '0')}-${airDate?.month.toString().padLeft(2, '0')}-${airDate?.day.toString().padLeft(2, '0')}",
-    "episode_count": episodeCount,
-    "id": id,
-    "name": name,
-    "overview": overview,
-    "poster_path": posterPath,
-    "season_number": seasonNumber,
-    "vote_average": voteAverage,
-  };
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+    airDate,
+    episodeCount,
+    id,
+    name,
+    overview,
+    posterPath,
+    seasonNumber,
+    voteAverage,
+  ];
 }
 
-class SpokenLanguage {
+class SpokenLanguage extends Equatable{
   final String englishName;
   final String iso6391;
   final String name;
@@ -416,11 +385,13 @@ class SpokenLanguage {
     name: json["name"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "english_name": englishName,
-    "iso_639_1": iso6391,
-    "name": name,
-  };
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+    englishName,
+    name,
+    iso6391
+  ];
 }
 
 class EnumValues<T> {
@@ -428,9 +399,4 @@ class EnumValues<T> {
   late Map<T, String> reverseMap;
 
   EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

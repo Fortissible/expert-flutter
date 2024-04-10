@@ -5,5 +5,9 @@ String readJson(String name) {
   if (dir.endsWith('/test')) {
     dir = dir.replaceAll('/test', '');
   }
-  return File('$dir/test/$name').readAsStringSync();
+  var file = File('$dir/test/$name');
+  var content = file.readAsStringSync();
+  // Remove invalid characters
+  content = content.replaceAll('\uFEFF', '');
+  return content;
 }

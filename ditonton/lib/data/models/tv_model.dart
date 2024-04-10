@@ -45,21 +45,6 @@ class TvModel extends Equatable{
     voteCount: json["vote_count"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "adult": adult,
-    "backdrop_path": backdropPath,
-    "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
-    "id": id,
-    "original_language": originalLanguage,
-    "original_name": originalName,
-    "overview": overview,
-    "popularity": popularity,
-    "poster_path": posterPath,
-    "name": name,
-    "vote_average": voteAverage,
-    "vote_count": voteCount,
-  };
-
   Tv toEntity() => Tv(
       adult: adult,
       backdropPath: backdropPath!,
