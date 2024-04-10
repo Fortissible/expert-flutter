@@ -2,10 +2,8 @@
 //
 //     final tvResponse = tvResponseFromJson(jsonString);
 
-import 'dart:convert';
 
 import 'package:ditonton/data/models/tv_model.dart';
-import 'package:equatable/equatable.dart';
 
 class TvResponse{
   final int page;
