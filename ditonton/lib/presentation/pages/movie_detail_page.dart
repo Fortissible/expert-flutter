@@ -103,7 +103,7 @@ class DetailContent extends StatelessWidget {
                           children: [
                             Text(
                               movie.title,
-                              style: kHeading5,
+                              style: kTextTheme.headlineSmall,
                             ),
                             ElevatedButton(
                               onPressed: () async {

@@ -116,7 +116,7 @@ class DetailContent extends StatelessWidget {
                           children: [
                             Text(
                               tvDetail.name,
-                              style: kHeading5,
+                              style: kTextTheme.headlineSmall,
                             ),
                             ElevatedButton(
                               onPressed: () async {

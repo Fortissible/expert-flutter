@@ -61,12 +61,26 @@ void main() {
   });
 
   testWidgets(
+      'Should display loading progressbar when load the data from api',
+          (WidgetTester tester) async {
+        when(mockNotifier.movieState).thenReturn(RequestState.Loading);
+
+        final progressBarLoading = find.byType(CircularProgressIndicator);
+
+        await tester.pumpWidget(_makeTestableWidget(MovieDetailPage(id: 1)));
+
+        expect(progressBarLoading, findsOneWidget);
+      });
+
+  testWidgets(
       'Watchlist button should display Snackbar when added to watchlist',
       (WidgetTester tester) async {
     when(mockNotifier.movieState).thenReturn(RequestState.Loaded);
     when(mockNotifier.movie).thenReturn(testMovieDetail);
     when(mockNotifier.recommendationState).thenReturn(RequestState.Loaded);
-    when(mockNotifier.movieRecommendations).thenReturn(<Movie>[]);
+    when(mockNotifier.movieRecommendations).thenReturn(<Movie>[
+      testMovie
+    ]);
     when(mockNotifier.isAddedToWatchlist).thenReturn(false);
     when(mockNotifier.watchlistMessage).thenReturn('Added to Movies Watchlist');
 
