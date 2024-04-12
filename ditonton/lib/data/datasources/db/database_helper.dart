@@ -1,15 +1,14 @@
 import 'dart:async';
-
 import 'package:ditonton/data/models/movie_table.dart';
 import 'package:sqflite/sqflite.dart';
-
 import '../../models/tv_table.dart';
 
 class DatabaseHelper {
   static const String _tblWatchlist = 'watchlist_movies';
   static const String _tblWatchlistTv = 'watchlist_tv';
 
-  final Database? database;
+  final Future<Database?> database;
+
   DatabaseHelper({
     required this.database
   });

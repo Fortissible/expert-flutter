@@ -6,23 +6,25 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../../../dummy_data/dummy_objects.dart';
 
 void main() {
-  late Database database;
   late DatabaseHelper databaseHelper;
+  late Database? database;
   const String _tblWatchlist = 'watchlist_movies';
   const String _tblWatchlistTv = 'watchlist_tv';
 
   tearDown(() async {
-    await database.execute("DROP TABLE IF EXISTS $_tblWatchlist");
-    await database.execute("DROP TABLE IF EXISTS $_tblWatchlistTv");
+    await database!.execute("DROP TABLE IF EXISTS $_tblWatchlist");
+    await database!.execute("DROP TABLE IF EXISTS $_tblWatchlistTv");
   });
 
   setUp(() async {
     sqfliteFfiInit();
-    database = await databaseFactoryFfi.openDatabase(inMemoryDatabasePath);
-    await database.execute("DROP TABLE IF EXISTS $_tblWatchlist");
-    await database.execute("DROP TABLE IF EXISTS $_tblWatchlistTv");
-    await database.execute(
-    '''
+    final futureDb = databaseFactoryFfi.openDatabase(inMemoryDatabasePath);
+    databaseHelper = DatabaseHelper(database: futureDb);
+    database = await databaseHelper.database;
+    await database!.execute("DROP TABLE IF EXISTS $_tblWatchlist");
+    await database!.execute("DROP TABLE IF EXISTS $_tblWatchlistTv");
+    await database!.execute(
+        '''
       CREATE TABLE  $_tblWatchlist (
         id INTEGER PRIMARY KEY,
         title TEXT,
@@ -31,7 +33,7 @@ void main() {
       );
     '''
     );
-    await database.execute(
+    await database!.execute(
         '''
       CREATE TABLE  $_tblWatchlistTv (
         id INTEGER PRIMARY KEY,
@@ -41,7 +43,6 @@ void main() {
       );
     '''
     );
-    databaseHelper = DatabaseHelper(database: database);
   });
 
   _arrangeInsertTv() async {
@@ -70,7 +71,7 @@ void main() {
 
   group('Database Test', () {
     test('sqflite version', () async {
-      expect(await database.getVersion(), 0);
+      expect(await database!.getVersion(), 0);
     });
 
     test('add Tv watchlist to database', () async {

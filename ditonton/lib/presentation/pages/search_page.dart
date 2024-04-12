@@ -28,7 +28,7 @@ class SearchPage extends StatelessWidget {
           children: [
             TextField(
               onSubmitted: (query) {
-                searchType == "Movie"
+                searchType == "Movies"
                     ? Provider.of<MovieSearchNotifier>(context, listen: false)
                     .fetchMovieSearch(query)
                     : Provider.of<TvSearchNotifier>(context, listen: false)
@@ -46,7 +46,7 @@ class SearchPage extends StatelessWidget {
               'Search Result',
               style: kHeading6,
             ),
-            searchType == "Movie"
+            searchType == "Movies"
               ? Consumer<MovieSearchNotifier>(
                 builder: (context, data, child) {
                   if (data.state == RequestState.Loading) {
