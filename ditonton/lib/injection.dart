@@ -1,3 +1,8 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:ditonton/data/datasources/db/database.dart';
 import 'package:ditonton/data/datasources/db/database_helper.dart';
 import 'package:ditonton/data/datasources/movie_local_data_source.dart';
@@ -45,7 +50,7 @@ import 'package:get_it/get_it.dart';
 
 final locator = GetIt.instance;
 
-void init() {
+void init(ByteData sslCert) {
   // provider
   locator.registerFactory(
         () => MovieListNotifier(
@@ -178,13 +183,13 @@ void init() {
 
   // data sources
   locator.registerLazySingleton<TvRemoteDataSource>(
-          () => TvRemoteDataSourceImpl(client: locator())
+          () => TvRemoteDataSourceImpl(dio: locator())
   );
   locator.registerLazySingleton<TvLocalDataSource>(
           () => TvLocalDataSourceImpl(databaseHelper: locator())
   );
   locator.registerLazySingleton<MovieRemoteDataSource>(
-          () => MovieRemoteDataSourceImpl(client: locator()));
+          () => MovieRemoteDataSourceImpl(dio: locator()));
   locator.registerLazySingleton<MovieLocalDataSource>(
           () => MovieLocalDataSourceImpl(databaseHelper: locator()));
 
@@ -196,6 +201,16 @@ void init() {
   // db instance
   locator.registerLazySingleton<DatabaseInstance>(() => DatabaseInstance());
 
+  final Dio dio = Dio();
+  dio.httpClientAdapter = IOHttpClientAdapter(
+    createHttpClient: (){
+      final securityContext = SecurityContext(withTrustedRoots: false); //1
+      securityContext.setTrustedCertificatesBytes(sslCert.buffer.asUint8List());
+      final client = HttpClient(context: securityContext);
+      client.badCertificateCallback = (cert, host, port)=>true;
+      return client;
+    }
+  );
   // external
-  locator.registerLazySingleton(() => http.Client());
+  locator.registerLazySingleton(() => dio);
 }
