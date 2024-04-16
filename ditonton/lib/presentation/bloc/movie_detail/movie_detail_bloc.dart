@@ -1,15 +1,22 @@
 import 'package:ditonton/common/state_enum.dart';
-import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_event.dart';
-import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_state.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../domain/entities/movie.dart';
+import '../../../domain/entities/movie_detail.dart';
 import '../../../domain/usecases/get_movie_detail.dart';
 import '../../../domain/usecases/get_movie_recommendations.dart';
 import '../../../domain/usecases/get_watchlist_status.dart';
 import '../../../domain/usecases/remove_watchlist.dart';
 import '../../../domain/usecases/save_watchlist.dart';
 
+part 'movie_detail_event.dart';
+part 'movie_detail_state.dart';
+
 class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
+  static const watchlistAddSuccessMessage = 'Added to Movies Watchlist';
+  static const watchlistRemoveSuccessMessage = 'Removed Movies Watchlist';
+
   final GetMovieDetail _getMovieDetail;
   final GetMovieRecommendations _getMovieRecommendations;
   final GetWatchListStatus _getWatchListStatus;
@@ -26,8 +33,7 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
       MovieDetailState(movieRecommendations: [])
   ){
     on<FetchMovieDetail>((event, emit) async {
-      emit(MovieDetailState(
-          movieRecommendations: [],
+      emit(state.copyWith(
           movieDetailState: RequestState.Loading
       ));
 
@@ -39,50 +45,91 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
 
       result.fold(
               (failure) {
-                emit(MovieDetailState(
-                    movieRecommendations: [],
+                emit(state.copyWith(
                     movieDetailState: RequestState.Error,
                     movieDetailMsg: failure.message
                 ));
               }, 
               (success) {
-                emit(MovieDetailState(
-                    movieRecommendationState: RequestState.Loading,
-                    movieRecommendations: [],
+                emit(state.copyWith(
                     movieDetailState: RequestState.Loaded,
-                    movieDetail: success
+                    movieDetail: success,
+                    movieRecommendationState: RequestState.Loading,
                 ));
 
                 recommendationsResult.fold(
                         (recommendationFailure) {
-                          emit(MovieDetailState(
+                          emit(state.copyWith(
                               movieRecommendationState: RequestState.Error,
                               movieRecommendationMsg: recommendationFailure.message,
-                              movieRecommendations: [],
-                              movieDetailState: RequestState.Loaded,
-                              movieDetail: success
                           ));
                         },
                         (recommendationSuccess) {
                           if (recommendationSuccess.isNotEmpty){
-                            emit(MovieDetailState(
+                            emit(state.copyWith(
                               movieRecommendationState: RequestState.Loaded,
                               movieRecommendations: recommendationSuccess,
-                              movieDetailState: RequestState.Loaded,
-                              movieDetail: success,
                             ));
                           } else {
-                            emit(MovieDetailState(
+                            emit(state.copyWith(
                                 movieRecommendationState: RequestState.Empty,
                                 movieRecommendations: [],
-                                movieDetailState: RequestState.Loaded,
-                                movieDetail: success
                             ));
                           }
                         }
                 );
               }
       );
+    });
+
+    on<AddWatchlistMovie>((event, emit) async {
+      final movieDetail = event.movieDetail;
+      final result = await _saveWatchlist.execute(movieDetail);
+      result.fold(
+              (failure) {
+                emit(
+                  state.copyWith(
+                    movieWatchlistMsg: failure.message
+                  )
+                );
+              },
+              (success) {
+                emit(
+                    state.copyWith(
+                        movieWatchlistMsg: success
+                    )
+                );
+              }
+      );
+      add(LoadWatchlistMovie(movieId: movieDetail.id));
+    });
+
+    on<RemoveWatchlistMovie>((event, emit) async {
+      final movieDetail = event.movieDetail;
+      final result = await _removeWatchlist.execute(movieDetail);
+      result.fold(
+              (failure) {
+                emit(
+                    state.copyWith(
+                        movieWatchlistMsg: failure.message
+                    )
+                );
+          },
+              (success) {
+                emit(
+                    state.copyWith(
+                        movieWatchlistMsg: success
+                    )
+                );
+          }
+      );
+      add(LoadWatchlistMovie(movieId: movieDetail.id));
+    });
+
+    on<LoadWatchlistMovie>((event, emit) async {
+      final movieId = event.movieId;
+      final result = await _getWatchListStatus.execute(movieId);
+      emit(state.copyWith(movieWatchlistStatus: result));
     });
   }
 }

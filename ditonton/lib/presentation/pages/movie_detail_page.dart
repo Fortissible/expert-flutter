@@ -3,14 +3,10 @@ import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/domain/entities/genre.dart';
 import 'package:ditonton/domain/entities/movie_detail.dart';
 import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_bloc.dart';
-import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_event.dart';
-import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_state.dart';
-import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:provider/provider.dart';
 
 class MovieDetailPage extends StatefulWidget {
   static const ROUTE_NAME = '/detail';
@@ -33,6 +29,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
       // Provider.of<MovieDetailNotifier>(context, listen: false)
       //     .loadWatchlistStatus(widget.id);
+      context.read<MovieDetailBloc>().add(LoadWatchlistMovie(movieId: widget.id));
     });
   }
 
@@ -71,7 +68,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               child: DetailContent(
                 movie,
                 state,
-                false,
+                state.movieWatchlistStatus,
               ),
             );
           } else if (state.movieDetailState == RequestState.Error){
@@ -132,41 +129,52 @@ class DetailContent extends StatelessWidget {
                               movie.title,
                               style: kTextTheme.headlineSmall,
                             ),
+                            BlocListener<MovieDetailBloc, MovieDetailState>(
+                                child: SizedBox(),
+                                listenWhen: (oldState, newState) {
+                                  return oldState.movieWatchlistMsg != newState.movieWatchlistMsg &&
+                                      newState.movieWatchlistMsg != '';
+                                },
+                                listener: (ctx, state){
+                                  final message = state.movieWatchlistMsg;
+
+                                  if (message ==
+                                      MovieDetailBloc
+                                          .watchlistAddSuccessMessage ||
+                                      message ==
+                                          MovieDetailBloc
+                                              .watchlistRemoveSuccessMessage) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text(message)));
+                                  } else {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            content: Text(message),
+                                          );
+                                        });
+                                  }
+                                }
+                            ),
                             ElevatedButton(
                               onPressed: () async {
                                 if (!isAddedWatchlist) {
-                                  await Provider.of<MovieDetailNotifier>(
-                                          context,
-                                          listen: false)
-                                      .addWatchlist(movie);
+                                  // await Provider.of<MovieDetailNotifier>(
+                                  //         context,
+                                  //         listen: false)
+                                  //     .addWatchlist(movie);
+                                  context.read<MovieDetailBloc>().add(
+                                    AddWatchlistMovie(movieDetail: movie)
+                                  );
                                 } else {
-                                  await Provider.of<MovieDetailNotifier>(
-                                          context,
-                                          listen: false)
-                                      .removeFromWatchlist(movie);
-                                }
-
-                                final message =
-                                    Provider.of<MovieDetailNotifier>(context,
-                                            listen: false)
-                                        .watchlistMessage;
-
-                                if (message ==
-                                        MovieDetailNotifier
-                                            .watchlistAddSuccessMessage ||
-                                    message ==
-                                        MovieDetailNotifier
-                                            .watchlistRemoveSuccessMessage) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(message)));
-                                } else {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          content: Text(message),
-                                        );
-                                      });
+                                  // await Provider.of<MovieDetailNotifier>(
+                                  //         context,
+                                  //         listen: false)
+                                  //     .removeFromWatchlist(movie);
+                                  context.read<MovieDetailBloc>().add(
+                                      RemoveWatchlistMovie(movieDetail: movie)
+                                  );
                                 }
                               },
                               child: Row(
