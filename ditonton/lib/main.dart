@@ -2,6 +2,7 @@ import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/utils.dart';
 import 'package:ditonton/domain/entities/tv_season_detail_args.dart';
 import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_detail/tv_detail_bloc.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
 import 'package:ditonton/presentation/pages/movie_detail_page.dart';
 import 'package:ditonton/presentation/pages/home_movie_page.dart';
@@ -56,9 +57,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => di.locator<TvSearchNotifier>(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<TvDetailNotifier>(),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<TvDetailNotifier>(),
+        // ),
+        BlocProvider(
+          create: (_) => di.locator<TvDetailBloc>(),
         ),
+
         ChangeNotifierProvider(
           create: (_) => di.locator<TvSeasonDetailNotifier>(),
         ),
