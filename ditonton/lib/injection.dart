@@ -33,15 +33,15 @@ import 'package:ditonton/domain/usecases/remove_watchlist_tv.dart';
 import 'package:ditonton/domain/usecases/save_watchlist.dart';
 import 'package:ditonton/domain/usecases/save_watchlist_tv.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
-import 'package:ditonton/domain/usecases/search_tv.dart';
+import 'package:ditonton/domain/usecases/search_tv.dart' as usecase;
 import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_list/movie_list_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_popular/movie_popular_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie_search/movie_search_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_top_rated/movie_top_rated_bloc.dart';
 import 'package:ditonton/presentation/bloc/tv_detail/tv_detail_bloc.dart';
 import 'package:ditonton/presentation/bloc/tv_list/tv_list_bloc.dart';
-import 'package:ditonton/presentation/provider/movie_search_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_search_notifier.dart';
+import 'package:ditonton/presentation/bloc/tv_search/tv_search_bloc.dart';
 import 'package:ditonton/presentation/provider/tv_season_detail_notifier.dart';
 import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:ditonton/presentation/provider/watchlist_tv_notifier.dart';
@@ -93,21 +93,22 @@ void init(ByteData sslCert) {
           locator()
         ),
   );
-
-  // provider
   locator.registerFactory(
-        () => MovieSearchNotifier(
-      searchMovies: locator(),
+        () => MovieSearchBloc(
+      locator(),
     ),
   );
+  locator.registerFactory(
+        () => TvSearchBloc(
+      locator(),
+    ),
+  );
+
+  // provider
   locator.registerFactory(
         () => WatchlistMovieNotifier(
       getWatchlistMovies: locator(),
     ),
-  );
-
-  locator.registerFactory(
-          () => TvSearchNotifier(searchTv: locator())
   );
   locator.registerFactory(
           () => TvSeasonDetailNotifier(
@@ -148,7 +149,7 @@ void init(ByteData sslCert) {
           () => GetTvSeasonDetail(repository: locator())
   );
   locator.registerLazySingleton(
-          () => SearchTv(repository: locator())
+          () => usecase.SearchTv(repository: locator())
   );
   locator.registerLazySingleton(
           () => GetTvRecommendation(repository: locator())
