@@ -25,12 +25,6 @@ class _TvDetailPageState extends State<TvDetailPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      // Provider.of<TvDetailNotifier>(context, listen: false)
-      //     .fetchTvDetail(widget.id.toString());
-      // Provider.of<TvDetailNotifier>(context, listen: false)
-      //     .fetchTvRecommendations(widget.id.toString());
-      // Provider.of<TvDetailNotifier>(context, listen: false)
-      //     .loadWatchlistStatus(widget.id);
       context.read<TvDetailBloc>().add(FetchTvDetail(tvId: widget.id));
       context.read<TvDetailBloc>().add(LoadTvWatchlist(tvId: widget.id));
     });
@@ -39,28 +33,6 @@ class _TvDetailPageState extends State<TvDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: Consumer<TvDetailNotifier>(
-      //   builder: (context, provider, child) {
-      //     if (provider.tvDetailState == RequestState.Loading) {
-      //       return Center(
-      //         child: CircularProgressIndicator(),
-      //       );
-      //     } else if (provider.tvDetailState == RequestState.Loaded) {
-      //       final tvDetail = provider.tvDetail;
-      //       return SafeArea(
-      //         child: DetailContent(
-      //           tvDetail!,
-      //           provider.tvRecommendations,
-      //           provider.isAddedToWatchlist,
-      //           context
-      //         ),
-      //       );
-      //     } else {
-      //       return Text(provider.tvDetailErrorMsg);
-      //     }
-      //   },
-      // ),
-
       body: BlocBuilder<TvDetailBloc, TvDetailState>(
         builder: (BuildContext context, TvDetailState state) {
           final tvDetailState = state.tvDetailState;

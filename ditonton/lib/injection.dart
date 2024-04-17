@@ -35,14 +35,12 @@ import 'package:ditonton/domain/usecases/save_watchlist_tv.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
 import 'package:ditonton/domain/usecases/search_tv.dart';
 import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie_list/movie_list_bloc.dart';
 import 'package:ditonton/presentation/bloc/tv_detail/tv_detail_bloc.dart';
-import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
-import 'package:ditonton/presentation/provider/movie_list_notifier.dart';
+import 'package:ditonton/presentation/bloc/tv_list/tv_list_bloc.dart';
 import 'package:ditonton/presentation/provider/movie_search_notifier.dart';
 import 'package:ditonton/presentation/provider/popular_movies_notifier.dart';
 import 'package:ditonton/presentation/provider/top_rated_movies_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_detail_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_list_notifier.dart';
 import 'package:ditonton/presentation/provider/tv_search_notifier.dart';
 import 'package:ditonton/presentation/provider/tv_season_detail_notifier.dart';
 import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
@@ -71,24 +69,22 @@ void init(ByteData sslCert) {
         locator()
     ),
   );
+  locator.registerFactory(
+    () => MovieListBloc(
+        locator(),
+        locator(),
+        locator()
+    )
+  );
+  locator.registerFactory(
+          () => TvListBloc(
+          locator(),
+          locator(),
+          locator()
+      )
+  );
 
   // provider
-  locator.registerFactory(
-        () => MovieListNotifier(
-      getNowPlayingMovies: locator(),
-      getPopularMovies: locator(),
-      getTopRatedMovies: locator(),
-    ),
-  );
-  // locator.registerFactory(
-  //       () => MovieDetailNotifier(
-  //     getMovieDetail: locator(),
-  //     getMovieRecommendations: locator(),
-  //     getWatchListStatus: locator(),
-  //     saveWatchlist: locator(),
-  //     removeWatchlist: locator(),
-  //   ),
-  // );
   locator.registerFactory(
         () => MovieSearchNotifier(
       searchMovies: locator(),
@@ -110,27 +106,10 @@ void init(ByteData sslCert) {
     ),
   );
 
-  locator.registerFactory(
-          () => TvListNotifier(
-          getTopRatedTv: locator(),
-          getPopularTv: locator(),
-          getNowPlayingTv: locator()
-      )
-  );
 
   locator.registerFactory(
           () => TvSearchNotifier(searchTv: locator())
   );
-
-  // locator.registerFactory(
-  //         () => TvDetailNotifier(
-  //         getTvDetail: locator(),
-  //         getTvRecommendation: locator(),
-  //         getWatchListStatus: locator(),
-  //         saveWatchlist: locator(),
-  //         removeWatchlist: locator()
-  //     )
-  // );
   locator.registerFactory(
           () => TvSeasonDetailNotifier(
           getTvSeasonDetail: locator()
