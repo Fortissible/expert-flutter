@@ -1,8 +1,8 @@
 import 'package:ditonton/common/state_enum.dart';
-import 'package:ditonton/presentation/provider/tv_list_notifier.dart';
+import 'package:ditonton/presentation/bloc/tv_list/tv_list_bloc.dart';
 import 'package:ditonton/presentation/widgets/tv_card_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NowPlayingTvPage extends StatefulWidget {
   static const ROUTE_NAME = '/now-playing-tv';
@@ -16,8 +16,9 @@ class _NowPlayingTvPageState extends State<NowPlayingTvPage> {
   void initState() {
     super.initState();
     Future.microtask(() =>
-        Provider.of<TvListNotifier>(context, listen: false)
-            .fetchNowPlayingTv()
+        context.read<TvListBloc>().add(
+          FetchOnAirTv()
+        )
     );
   }
 
@@ -29,25 +30,33 @@ class _NowPlayingTvPageState extends State<NowPlayingTvPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer<TvListNotifier>(
-          builder: (context, data, child) {
-            if (data.nowPlayingState == RequestState.Loading) {
+        child: BlocBuilder<TvListBloc, TvListState>(
+          builder: (BuildContext context, TvListState state) {
+            final tvOnAirState = state.tvOnAirState;
+            if (tvOnAirState == RequestState.Loading) {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (data.nowPlayingState == RequestState.Loaded) {
+            } else if (tvOnAirState == RequestState.Loaded) {
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  final tv = data.nowPlayingTv[index];
+                  final tv = state.tvOnAir![index];
                   return TvCard(tv);
                 },
-                itemCount: data.nowPlayingTv.length,
+                itemCount: state.tvOnAir!.length,
               );
-            } else {
+            } else if (tvOnAirState == RequestState.Empty ) {
+              return Center(
+                key: Key('empty_message'),
+                child: Text("No on air TV series found!"),
+              );
+            } else if (tvOnAirState == RequestState.Error ) {
               return Center(
                 key: Key('error_message'),
-                child: Text(data.nowPlayingErrorMsg),
+                child: Text(state.tvOnAirMsg),
               );
+            } else {
+              return const SizedBox();
             }
           },
         ),

@@ -1,8 +1,8 @@
 import 'package:ditonton/common/state_enum.dart';
-import 'package:ditonton/presentation/provider/tv_list_notifier.dart';
+import 'package:ditonton/presentation/bloc/tv_list/tv_list_bloc.dart';
 import 'package:ditonton/presentation/widgets/tv_card_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TopRatedTvPage extends StatefulWidget {
   static const ROUTE_NAME = '/top-rated-tv';
@@ -16,8 +16,9 @@ class _TopRatedTvPageState extends State<TopRatedTvPage> {
   void initState() {
     super.initState();
     Future.microtask(() =>
-        Provider.of<TvListNotifier>(context, listen: false)
-            .fetchTopRatedTv()
+        context.read<TvListBloc>().add(
+          FetchTopRatedTv()
+        )
     );
   }
 
@@ -29,28 +30,39 @@ class _TopRatedTvPageState extends State<TopRatedTvPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer<TvListNotifier>(
-          builder: (context, data, child) {
-            if (data.topRatedState == RequestState.Loading) {
+        child: BlocBuilder<TvListBloc,TvListState>(
+          builder: (ctx, state) {
+            final tvTopRatedState = state.tvTopRatedState;
+            if (tvTopRatedState == RequestState.Loading) {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (data.topRatedState == RequestState.Loaded) {
+            }
+            else if (tvTopRatedState == RequestState.Loaded) {
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  final tv = data.topRatedTv[index];
+                  final tv = state.tvTopRated![index];
                   return TvCard(tv);
                 },
-                itemCount: data.topRatedTv.length,
-              );
-            } else {
-              return Center(
-                key: Key('error_message'),
-                child: Text(data.topRatedErrorMsg),
+                itemCount: state.tvTopRated!.length,
               );
             }
+            else if (tvTopRatedState == RequestState.Empty){
+              return Center(
+                key: Key('empty_message'),
+                child: Text("No top rated TV Series found!"),
+              );
+            }
+            else if (tvTopRatedState == RequestState.Error){
+              return Center(
+                key: Key('error_message'),
+                child: Text(state.tvTopRatedMsg),
+              );
+            } else {
+              return const SizedBox();
+            }
           },
-        ),
+        )
       ),
     );
   }

@@ -32,10 +32,17 @@ class TvListBloc extends Bloc<TvListEvent, TvListState> {
             ));
           },
               (r) {
-            emit(state.copyWith(
-                tvOnAirState: RequestState.Loaded,
-                tvOnAir: r
-            ));
+            if (r.isNotEmpty){
+              emit(state.copyWith(
+                  tvOnAirState: RequestState.Loaded,
+                  tvOnAir: r
+              ));
+            } else {
+              emit(state.copyWith(
+                  tvOnAirState: RequestState.Empty,
+                  tvOnAir: []
+              ));
+            }
           }
       );
     });

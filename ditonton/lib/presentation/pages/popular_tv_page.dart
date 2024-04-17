@@ -1,8 +1,8 @@
 import 'package:ditonton/common/state_enum.dart';
-import 'package:ditonton/presentation/provider/tv_list_notifier.dart';
+import 'package:ditonton/presentation/bloc/tv_list/tv_list_bloc.dart';
 import 'package:ditonton/presentation/widgets/tv_card_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PopularTvPage extends StatefulWidget {
   static const ROUTE_NAME = '/popular-tv';
@@ -16,8 +16,9 @@ class _PopularTvPageState extends State<PopularTvPage> {
   void initState() {
     super.initState();
     Future.microtask(() =>
-        Provider.of<TvListNotifier>(context, listen: false)
-            .fetchPopularTv()
+        context.read<TvListBloc>().add(
+          FetchPopularTv()
+        )
     );
   }
 
@@ -29,25 +30,33 @@ class _PopularTvPageState extends State<PopularTvPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer<TvListNotifier>(
-          builder: (context, data, child) {
-            if (data.popularState == RequestState.Loading) {
+        child: BlocBuilder<TvListBloc,TvListState>(
+          builder: (ctx, state) {
+            final tvPopularState = state.tvPopularState;
+            if (tvPopularState == RequestState.Loading) {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (data.popularState == RequestState.Loaded) {
+            } else if (tvPopularState == RequestState.Loaded) {
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  final tv = data.popularTv[index];
+                  final tv = state.tvPopular![index];
                   return TvCard(tv);
                 },
-                itemCount: data.popularTv.length,
+                itemCount: state.tvPopular!.length,
               );
-            } else {
+            } else if (tvPopularState == RequestState.Empty) {
+              return Center(
+                key: Key('empty_message'),
+                child: Text("No popular TV Series found!"),
+              );
+            } else if (tvPopularState == RequestState.Error) {
               return Center(
                 key: Key('error_message'),
-                child: Text(data.popularErrorMsg),
+                child: Text(state.tvPopularMsg),
               );
+            } else {
+              return const SizedBox();
             }
           },
         ),
