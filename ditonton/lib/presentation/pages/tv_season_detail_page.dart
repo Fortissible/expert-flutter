@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/state_enum.dart';
+import 'package:ditonton/presentation/bloc/tv_season/tv_season_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entities/tv_season_detail.dart';
-import '../provider/tv_season_detail_notifier.dart';
 
 class TvSeasonDetailPage extends StatefulWidget {
   static const ROUTE_NAME = '/detailtv/season';
@@ -30,10 +30,11 @@ class _TvSeasonDetailPageState extends State<TvSeasonDetailPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<TvSeasonDetailNotifier>(context, listen: false)
-          .fetchTvSeasonDetail(
-            widget.tvId.toString(),
-            widget.seasonId.toString()
+      context.read<TvSeasonBloc>().add(
+        FetchTvSeason(
+            tvId: widget.tvId.toString(),
+            seasonId: widget.seasonId.toString()
+        )
       );
     });
   }
@@ -41,14 +42,15 @@ class _TvSeasonDetailPageState extends State<TvSeasonDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<TvSeasonDetailNotifier>(
-        builder: (context, provider, child) {
-          if (provider.tvSeasonDetailState == RequestState.Loading) {
+      body: BlocBuilder<TvSeasonBloc, TvSeasonState>(
+        builder: (context, state) {
+          final tvSeasonDetailState = state.tvSeasonState;
+          if (tvSeasonDetailState == RequestState.Loading) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else if (provider.tvSeasonDetailState == RequestState.Loaded) {
-            final tvDetail = provider.tvSeasonDetail;
+          } else if (tvSeasonDetailState == RequestState.Loaded) {
+            final tvDetail = state.tvSeason;
             return SafeArea(
               child: SeasonDetailContent(
                 tvDetail!,
@@ -56,8 +58,16 @@ class _TvSeasonDetailPageState extends State<TvSeasonDetailPage> {
                 widget.defaultPoster,
               ),
             );
-          } else {
-            return Text(provider.tvSeasonDetailErrorMsg);
+          }
+          else if (tvSeasonDetailState == RequestState.Error){
+            return Expanded(
+              child: Center(
+                child: Text(state.tvSeasonMsg),
+              ),
+            );
+          }
+          else {
+            return const SizedBox();
           }
         },
       ),

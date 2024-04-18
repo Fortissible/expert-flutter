@@ -1,5 +1,14 @@
 part of 'tv_watchlist_bloc.dart';
 
-sealed class TvWatchlistEvent extends Equatable {
+abstract class TvWatchlistEvent extends Equatable {
   const TvWatchlistEvent();
+
+  @override
+  List<Object?> get props => [];
 }
+
+class FetchTvWatchlist extends TvWatchlistEvent {
+  const FetchTvWatchlist();
+}
+
+

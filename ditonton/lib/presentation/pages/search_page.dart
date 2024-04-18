@@ -75,15 +75,19 @@ class SearchPage extends StatelessWidget {
                       );
                     }
                     else if (searchState == RequestState.Empty ) {
-                      return Center(
-                        key: Key('empty_message'),
-                        child: Text("Movies not found"),
+                      return Expanded(
+                        child: Center(
+                          key: Key('empty_message'),
+                          child: Text("Movies not found"),
+                        ),
                       );
                     }
                     else if (searchState == RequestState.Error ) {
-                      return Center(
-                        key: Key('error_message'),
-                        child: Text(state.movieSearchMsg),
+                      return Expanded(
+                        child: Center(
+                          key: Key('error_message'),
+                          child: Text(state.movieSearchMsg),
+                        ),
                       );
                     }
                     else {
@@ -113,15 +117,19 @@ class SearchPage extends StatelessWidget {
                       );
                     }
                     else if (searchState == RequestState.Empty ) {
-                      return Center(
-                        key: Key('empty_message'),
-                        child: Text("Movies not found"),
+                      return Expanded(
+                        child: Center(
+                          key: Key('empty_message'),
+                          child: Text("Movies not found"),
+                        ),
                       );
                     }
                     else if (searchState == RequestState.Error ) {
-                      return Center(
-                        key: Key('error_message'),
-                        child: Text(state.tvSearchMsg),
+                      return Expanded(
+                          child: Center(
+                            key: Key('error_message'),
+                            child: Text(state.tvSearchMsg),
+                          )
                       );
                     }
                     else {

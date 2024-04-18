@@ -39,12 +39,12 @@ import 'package:ditonton/presentation/bloc/movie_list/movie_list_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_popular/movie_popular_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_search/movie_search_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_top_rated/movie_top_rated_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie_watchlist/movie_watchlist_bloc.dart';
 import 'package:ditonton/presentation/bloc/tv_detail/tv_detail_bloc.dart';
 import 'package:ditonton/presentation/bloc/tv_list/tv_list_bloc.dart';
 import 'package:ditonton/presentation/bloc/tv_search/tv_search_bloc.dart';
-import 'package:ditonton/presentation/provider/tv_season_detail_notifier.dart';
-import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
-import 'package:ditonton/presentation/provider/watchlist_tv_notifier.dart';
+import 'package:ditonton/presentation/bloc/tv_season/tv_season_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_watchlist/tv_watchlist_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 final locator = GetIt.instance;
@@ -103,22 +103,20 @@ void init(ByteData sslCert) {
       locator(),
     ),
   );
-
-  // provider
   locator.registerFactory(
-        () => WatchlistMovieNotifier(
-      getWatchlistMovies: locator(),
+        () => MovieWatchlistBloc(
+      locator(),
     ),
   );
   locator.registerFactory(
-          () => TvSeasonDetailNotifier(
-          getTvSeasonDetail: locator()
+        () => TvWatchlistBloc(
+      locator(),
+    ),
+  );
+  locator.registerFactory(
+          () => TvSeasonBloc(
+          locator()
       )
-  );
-  locator.registerFactory(
-        () => WatchlistTvNotifier(
-      getWatchlistTv: locator(),
-    ),
   );
 
   // use case
