@@ -1,7 +1,7 @@
 name: core
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+publish_to: none
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
@@ -10,6 +10,28 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  about:
+    path: ../about
+  search:
+    path: ../search
+  watchlist:
+    path: ../watchlist
+  tvseries:
+    path: ../tvseries
+
+  equatable: ^2.0.2
+  google_fonts: ^5.1.0
+  flutter_bloc: ^8.1.5
+  dartz: ^0.10.0-nullsafety.2
+  dio: ^5.4.3
+
+  cupertino_icons: ^1.0.2
+
+  flutter_rating_bar: ^4.0.0
+  cached_network_image: ^3.0.0
+  sqflite: ^2.0.0+3
+  path_provider: ^2.0.2
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 name: watchlist
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+publish_to: none
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
@@ -10,6 +10,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  core:
+    path: ../core
+
+  flutter_bloc: ^8.1.5
+  dartz: ^0.10.0-nullsafety.2
+  equatable: ^2.0.2
+  google_fonts: ^5.1.0
 
 dev_dependencies:
   flutter_test:
