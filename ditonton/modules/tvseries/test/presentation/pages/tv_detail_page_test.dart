@@ -108,13 +108,6 @@ void main() {
   testWidgets(
       'Watchlist button should display Snackbar when added to watchlist',
           (WidgetTester tester) async {
-            when(() => mockBloc.state).thenReturn(
-                TvDetailState(
-                    tvRecommendations: const [],
-                    tvSeasons: null
-                )
-            );
-
             whenListen(
               mockBloc,
               Stream.fromIterable([
@@ -133,8 +126,6 @@ void main() {
                   tvDetail: testTvDetail,
                   tvRecommendationState: RequestState.Empty,
                   tvRecommendations: const <Tv>[],
-                  tvWatchlistStatus: true,
-                  tvWatchlistMsg: '',
                   tvSeasons: testSeason
               ),
             );
@@ -155,19 +146,28 @@ void main() {
   testWidgets(
       'Watchlist button should display AlertDialog when add to watchlist failed',
           (WidgetTester tester) async {
-            when(() => mockBloc.state).thenReturn(
+            whenListen(
+              mockBloc,
+              Stream.fromIterable([
                 TvDetailState(
-                    tvRecommendations: const [],
-                    tvSeasons: null
-                ).copyWith(
                     tvDetailState: RequestState.Loaded,
                     tvDetail: testTvDetail,
                     tvRecommendationState: RequestState.Empty,
-                    tvRecommendations: <Tv>[],
+                    tvRecommendations: const <Tv>[],
                     tvWatchlistStatus: false,
-                    tvRecommendationMsg: 'Failed',
+                    tvWatchlistMsg: 'Failed',
                     tvSeasons: testSeason
                 )
+              ]),
+              initialState: TvDetailState(
+                  tvDetailState: RequestState.Loaded,
+                  tvDetail: testTvDetail,
+                  tvRecommendationState: RequestState.Empty,
+                  tvRecommendations: const <Tv>[],
+                  tvWatchlistStatus: false,
+                  tvWatchlistMsg: '',
+                  tvSeasons: testSeason
+              ),
             );
 
         final watchlistButton = find.byType(ElevatedButton);
