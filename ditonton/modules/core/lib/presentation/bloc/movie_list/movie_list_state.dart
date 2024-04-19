@@ -12,7 +12,7 @@ class MovieListState extends Equatable {
   final String movieTopRatedMsg;
   final List<Movie>? movieTopRated;
 
-  MovieListState({
+  const MovieListState({
     this.movieOnAirState = RequestState.Empty,
     this.movieOnAirMsg = "",
     this.movieOnAir,

@@ -23,7 +23,7 @@ class TvDetailBloc extends Bloc<TvDetailEvent, TvDetailState>{
       this._saveWatchlist
   ) : super(
       TvDetailState(
-        tvRecommendations: [],
+        tvRecommendations: const [],
         tvSeasons: Seasons(
             expandedValue: ["Season 0 - 0 Episodes"],
             headerValue: "0 Seasons"

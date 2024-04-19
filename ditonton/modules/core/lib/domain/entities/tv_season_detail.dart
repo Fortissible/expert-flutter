@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:equatable/equatable.dart';
 
 class TvSeasonDetail extends Equatable{

@@ -1,0 +1,29 @@
+{
+  "_id": "5258711f760ee3466122d89d",
+  "air_date": "2009-07-16",
+  "episodes": [
+    {
+      "air_date": "2009-07-16",
+      "episode_number": 1,
+      "episode_type": "standard",
+      "id": 617769,
+      "name": "Pilot: Danielle Staub",
+      "overview": "",
+      "production_code": "",
+      "runtime": 30,
+      "season_number": 1,
+      "show_id": 22980,
+      "still_path": null,
+      "vote_average": 0,
+      "vote_count": 0,
+      "crew": [],
+      "guest_stars": []
+    }
+  ],
+  "name": "Season 1",
+  "overview": "",
+  "id": 32928,
+  "poster_path": null,
+  "season_number": 1,
+  "vote_average": 0
+}

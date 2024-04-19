@@ -12,7 +12,7 @@ class MovieDetailState extends Equatable{
   final String movieWatchlistMsg;
   final bool movieWatchlistStatus;
 
-  MovieDetailState({
+  const MovieDetailState({
     this.movieDetailState = RequestState.Empty,
     this.movieDetailMsg = "",
     this.movieDetail,

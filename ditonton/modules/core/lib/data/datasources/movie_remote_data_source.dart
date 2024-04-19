@@ -30,7 +30,6 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
         await dio.get('$BASE_URL/movie/now_playing?$API_KEY');
 
     if (response.statusCode == 200) {
-      print(response.data);
       return MovieResponse.fromJson(response.data).movieList;
     } else {
       throw ServerException();

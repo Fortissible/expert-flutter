@@ -19,7 +19,7 @@ class MovieListBloc extends Bloc<MovieListEvent,MovieListState>{
       this._getPopularMovies,
       this._getTopRatedMovies
   ):super(
-    MovieListState() // INIT
+    const MovieListState() // INIT
   ){
     on<FetchOnAirMovie>((event, emit) async {
       emit(state.copyWith(

@@ -11,9 +11,7 @@ class DatabaseInstance {
   static Database? _database;
 
   Future<Database?> get database async {
-    if (_database == null) {
-      _database = await _initDb();
-    }
+    _database ??= await _initDb();
     return _database;
   }
 

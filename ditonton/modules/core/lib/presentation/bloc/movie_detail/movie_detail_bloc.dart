@@ -22,7 +22,7 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
       this._removeWatchlist,
       this._saveWatchlist
   ):super(
-      MovieDetailState()
+      const MovieDetailState()
   ){
     on<FetchMovieDetail>((event, emit) async {
       emit(state.copyWith(

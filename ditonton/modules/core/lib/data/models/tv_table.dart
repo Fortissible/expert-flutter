@@ -1,7 +1,6 @@
 import 'package:core/core.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../domain/entities/tv.dart';
 
 class TvTable extends Equatable {
   final int id;
@@ -9,7 +8,7 @@ class TvTable extends Equatable {
   final String? posterPath;
   final String? overview;
 
-  TvTable({
+  const TvTable({
     required this.id,
     required this.name,
     required this.posterPath,

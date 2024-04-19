@@ -1,5 +1,5 @@
 part of 'tv_season_bloc.dart';
-final class TvSeasonState extends Equatable {
+class TvSeasonState extends Equatable {
   final RequestState tvSeasonState;
   final TvSeasonDetail? tvSeason;
   final String tvSeasonMsg;

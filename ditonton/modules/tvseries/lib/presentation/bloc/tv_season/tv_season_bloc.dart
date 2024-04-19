@@ -10,7 +10,7 @@ class TvSeasonBloc extends Bloc<TvSeasonEvent, TvSeasonState> {
 
   TvSeasonBloc(
       this._getTvSeasonDetail
-      ) : super(TvSeasonState()) {
+      ) : super(const TvSeasonState()) {
     on<FetchTvSeason>((event, emit) async {
       emit(
         state.copyWith(
