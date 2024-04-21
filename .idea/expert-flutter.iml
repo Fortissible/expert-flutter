@@ -9,8 +9,28 @@
       <excludeFolder url="file://$MODULE_DIR$/expert_flutter/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/expert_flutter/build" />
       <excludeFolder url="file://$MODULE_DIR$/expert_flutter/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/core/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/core/build" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/core/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/about/build" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/about/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/about/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/search/build" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/search/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/search/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/tvseries/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/tvseries/build" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/tvseries/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/watchlist/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/watchlist/build" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/watchlist/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" name="Dart Packages" level="project" />
   </component>
 </module>
