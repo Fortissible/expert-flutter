@@ -34,10 +34,17 @@ class MovieListBloc extends Bloc<MovieListEvent,MovieListState>{
                 ));
               },
               (r) {
-                emit(state.copyWith(
-                    movieOnAirState: RequestState.Loaded,
-                    movieOnAir: r
-                ));
+                if(r.isNotEmpty){
+                  emit(state.copyWith(
+                      movieOnAirState: RequestState.Loaded,
+                      movieOnAir: r
+                  ));
+                } else {
+                  emit(state.copyWith(
+                      movieOnAirState: RequestState.Empty,
+                      movieOnAir: []
+                  ));
+                }
               }
       );
     });
@@ -55,10 +62,17 @@ class MovieListBloc extends Bloc<MovieListEvent,MovieListState>{
             ));
           },
               (r) {
-            emit(state.copyWith(
-                moviePopularState: RequestState.Loaded,
-                moviePopular: r
-            ));
+                if (r.isNotEmpty){
+                  emit(state.copyWith(
+                      moviePopularState: RequestState.Loaded,
+                      moviePopular: r
+                  ));
+                } else {
+                  emit(state.copyWith(
+                      moviePopularState: RequestState.Empty,
+                      moviePopular: []
+                  ));
+                }
           }
       );
     });
@@ -76,10 +90,17 @@ class MovieListBloc extends Bloc<MovieListEvent,MovieListState>{
             ));
           },
               (r) {
-            emit(state.copyWith(
-                movieTopRatedState: RequestState.Loaded,
-                movieTopRated: r
-            ));
+            if (r.isNotEmpty){
+              emit(state.copyWith(
+                  movieTopRatedState: RequestState.Loaded,
+                  movieTopRated: r
+              ));
+            } else {
+              emit(state.copyWith(
+                  movieTopRatedState: RequestState.Empty,
+                  movieTopRated: []
+              ));
+            }
           }
       );
     });

@@ -12,9 +12,6 @@ class FetchMovieDetail extends MovieDetailEvent {
   const FetchMovieDetail({
     required this.movieId
   });
-
-  @override
-  List<Object> get props => [];
 }
 
 class FetchMovieRecommendation extends MovieDetailEvent {
@@ -22,9 +19,6 @@ class FetchMovieRecommendation extends MovieDetailEvent {
   const FetchMovieRecommendation({
     required this.movieId
   });
-
-  @override
-  List<Object> get props => [];
 }
 
 class AddWatchlistMovie extends MovieDetailEvent {

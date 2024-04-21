@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tvseries/bloc_utils/season_util.dart';
 import 'package:tvseries/tvseries.dart';
 part 'tv_detail_event.dart';
 part 'tv_detail_state.dart';
@@ -53,14 +54,7 @@ class TvDetailBloc extends Bloc<TvDetailEvent, TvDetailState>{
                 );
               },
               (success) {
-                List<String> expandedValue = [];
-                for(var i = 0; i < success.seasons.length; i++){
-                  expandedValue.add("• Season ${i+1} - ${success.seasons[i].episodeCount} Episode\n");
-                }
-                final season = Seasons(
-                    expandedValue: expandedValue,
-                    headerValue: "${success.seasons.length} Seasons"
-                );
+                final season = generateSeasonFromDetail(success.seasons);
 
                 emit(
                     state.copyWith(
@@ -81,12 +75,21 @@ class TvDetailBloc extends Bloc<TvDetailEvent, TvDetailState>{
                           );
                         },
                         (recommendationSuccess) {
-                          emit(
-                              state.copyWith(
-                                  tvRecommendationState: RequestState.Loaded,
-                                  tvRecommendations: recommendationSuccess
-                              )
-                          );
+                          if (recommendationSuccess.isNotEmpty){
+                            emit(
+                                state.copyWith(
+                                    tvRecommendationState: RequestState.Loaded,
+                                    tvRecommendations: recommendationSuccess
+                                )
+                            );
+                          } else {
+                            emit(
+                                state.copyWith(
+                                    tvRecommendationState: RequestState.Empty,
+                                    tvRecommendations: []
+                                )
+                            );
+                          }
                         }
                 );
               }

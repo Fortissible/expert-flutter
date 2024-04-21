@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tvseries/tvseries.dart';
 part 'tv_list_event.dart';
 part 'tv_list_state.dart';
+
 class TvListBloc extends Bloc<TvListEvent, TvListState> {
   final GetNowPlayingTv _getNowPlayingTv;
   final GetPopularTv _getPopularTv;
@@ -56,10 +57,17 @@ class TvListBloc extends Bloc<TvListEvent, TvListState> {
             ));
           },
               (r) {
-            emit(state.copyWith(
-                tvPopularState: RequestState.Loaded,
-                tvPopular: r
-            ));
+                if(r.isNotEmpty){
+                  emit(state.copyWith(
+                      tvPopularState: RequestState.Loaded,
+                      tvPopular: r
+                  ));
+                } else {
+                  emit(state.copyWith(
+                      tvPopularState: RequestState.Empty,
+                      tvPopular: []
+                  ));
+                }
           }
       );
     });
@@ -77,10 +85,17 @@ class TvListBloc extends Bloc<TvListEvent, TvListState> {
             ));
           },
               (r) {
-            emit(state.copyWith(
-                tvTopRatedState: RequestState.Loaded,
-                tvTopRated: r
-            ));
+                if (r.isNotEmpty){
+                  emit(state.copyWith(
+                      tvTopRatedState: RequestState.Loaded,
+                      tvTopRated: r
+                  ));
+                } else {
+                  emit(state.copyWith(
+                      tvTopRatedState: RequestState.Empty,
+                      tvTopRated: []
+                  ));
+                }
           }
       );
     });
