@@ -165,15 +165,19 @@ void init(ByteData sslCert) {
   locator.registerLazySingleton<DatabaseInstance>(() => DatabaseInstance());
 
   final Dio dio = Dio();
-  dio.httpClientAdapter = IOHttpClientAdapter(
-    createHttpClient: (){
-      final securityContext = SecurityContext(withTrustedRoots: false); //1
-      securityContext.setTrustedCertificatesBytes(sslCert.buffer.asUint8List());
-      final client = HttpClient(context: securityContext);
-      client.badCertificateCallback = (cert, host, port)=>true;
-      return client;
-    }
+  final IOHttpClientAdapter interceptor = IOHttpClientAdapter(
+      createHttpClient: (){
+        final securityContext = SecurityContext(withTrustedRoots: false); //1
+        securityContext.setTrustedCertificatesBytes(sslCert.buffer.asUint8List());
+        final client = HttpClient(context: securityContext);
+        client.badCertificateCallback = (cert, host, port) => false;
+        return client;
+      }
   );
+
   // external
-  locator.registerLazySingleton(() => dio);
+  locator.registerLazySingleton((){
+    dio.httpClientAdapter = interceptor;
+    return dio;
+  });
 }

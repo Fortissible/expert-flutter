@@ -1,4 +1,5 @@
 import 'package:core/styles/colors.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {
@@ -38,6 +39,7 @@ class AboutPage extends StatelessWidget {
           SafeArea(
             child: IconButton(
               onPressed: () => Navigator.pop(context),
+              // onPressed: () => FirebaseCrashlytics.instance.crash(), // TEST CRASHLYTICS
               icon: const Icon(Icons.arrow_back),
             ),
           )

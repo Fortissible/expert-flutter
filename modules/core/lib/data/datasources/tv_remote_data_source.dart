@@ -30,8 +30,8 @@ class TvRemoteDataSourceImpl implements TvRemoteDataSource {
   @override
   Future<List<TvModel>> getNowPlayingTvSeries() async {
     final response =
-    await dio.get('$BASE_URL$ENDPOINT_URL_TV_ONTHEAIR?$API_KEY');
-
+      await dio.get('$BASE_URL$ENDPOINT_URL_TV_ONTHEAIR?$API_KEY');
+    // await dio.get("https://cataas.com/cat");
     if (response.statusCode == 200) {
       return TvResponse.fromJson(response.data).results;
     } else {

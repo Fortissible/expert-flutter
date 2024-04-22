@@ -18,6 +18,9 @@ dependencies:
   equatable: ^2.0.2
   google_fonts: ^5.1.0
 
+  firebase_core: ^2.29.0
+  firebase_crashlytics: ^3.5.1
+
 dev_dependencies:
   mockito: ^5.0.8
   sqflite_common_ffi: ^2.3.3
