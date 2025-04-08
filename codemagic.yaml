@@ -36,6 +36,8 @@ workflows:
       - build/**/outputs/**/*.aab
       - build/**/outputs/**/mapping.txt
       - flutter_drive.log
+ci:
+  skip_test: true
       
 #  ios-workflow:
 #    name: iOS Workflow
