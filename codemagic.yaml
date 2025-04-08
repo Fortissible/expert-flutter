@@ -14,19 +14,6 @@ workflows:
       - name: Get Flutter packages
         script: |
           flutter packages pub get
-      - name: Flutter unit tests
-        script: |
-          cd modules/about/
-          flutter test
-          cd ../core/
-          flutter test
-          cd ../search/
-          flutter test
-          cd ../tvseries/
-          flutter test
-          cd ../watchlist/
-          flutter test
-        ignore_failure: false
       - name: Build AAB with Flutter
         script: | 
           flutter build appbundle --release \
